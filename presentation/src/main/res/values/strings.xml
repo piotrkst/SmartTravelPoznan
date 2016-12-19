@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SmartTravel</string>
+    <string name="get_timetable">Search</string>
+
+    <string name="btn_text_retry">Retry</string>
+    
+    // Exception messages
+    <string name="exception_message_generic">There was an application error</string>
+    <string name="exception_message_no_connection">There is no internet connection</string>
+</resources>
