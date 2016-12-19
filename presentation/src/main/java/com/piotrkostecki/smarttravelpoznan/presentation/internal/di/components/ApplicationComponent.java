@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.piotrkostecki.smarttravelpoznan.domain.executor.PostExecutionThread;
 import com.piotrkostecki.smarttravelpoznan.domain.executor.ThreadExecutor;
+import com.piotrkostecki.smarttravelpoznan.domain.repository.PekaRepository;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.modules.ApplicationModule;
 import com.piotrkostecki.smarttravelpoznan.presentation.navigation.Navigator;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.activity.BaseActivity;
@@ -24,4 +25,5 @@ public interface ApplicationComponent {
     Context context();
     ThreadExecutor threadExecutor();
     PostExecutionThread postExecutionThread();
+    PekaRepository pekaRepository();
 }

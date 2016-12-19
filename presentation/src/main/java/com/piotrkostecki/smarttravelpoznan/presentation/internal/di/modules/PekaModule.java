@@ -29,11 +29,10 @@ public class PekaModule {
     }
 
     @Provides @PerActivity @Named("directions")
-    UseCase provideGetDirectionUseCase(String busStop,
-                                       PekaRepository pekaRepository,
+    UseCase provideGetDirectionUseCase(PekaRepository pekaRepository,
                                        ThreadExecutor threadExecutor,
                                        PostExecutionThread postExecutionThread) {
-        return new GetDirections(busStop, pekaRepository, threadExecutor, postExecutionThread);
+        return new GetDirections(stopName, pekaRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides @PerActivity @Named("timetables")
