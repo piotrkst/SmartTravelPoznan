@@ -21,7 +21,7 @@
                 android:id="@+id/tv_line_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LINIA:"
+                android:text="@string/tv_line_label"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -30,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:text="69"
                 android:textColor="@android:color/black" />
 
         </LinearLayout>
@@ -44,7 +43,8 @@
                 android:id="@+id/tv_departure_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CZAS ODJAZDU:"
+                android:text="@string/tv_departure_label"
+                android:textAllCaps="true"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -53,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:text="35"
                 android:textColor="@android:color/black" />
         </LinearLayout>
     </LinearLayout>

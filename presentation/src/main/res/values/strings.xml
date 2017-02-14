@@ -8,6 +8,8 @@
 
     <string name="tv_prompt_recent_searches">Recent searches</string>
     <string name="tv_prompt_hints">Did you mean&#8230;?</string>
+    <string name="tv_departure_label">Departure:</string>
+    <string name="tv_line_label">Line No:</string>
 
     <string name="dialog_header">Choose your direction</string>
 
