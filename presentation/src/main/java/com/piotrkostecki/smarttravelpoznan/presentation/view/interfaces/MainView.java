@@ -1,16 +1,27 @@
 package com.piotrkostecki.smarttravelpoznan.presentation.view.interfaces;
 
-import com.piotrkostecki.smarttravelpoznan.presentation.model.DirectionModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.BollardModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.StopModel;
 
 import java.util.Collection;
 
 public interface MainView extends LoadDataView {
 
-    void showDirections();
+    void showStops();
 
-    void hideDirections();
+    void hideStops();
 
-    void viewTimetable();
+    void showStopListLoading();
 
-    void renderDirectionList(Collection<DirectionModel> directionCollection);
+    void hideStopListLoading();
+
+    void renderStopList(Collection<StopModel> directionCollection);
+
+    void renderBollardList(Collection<BollardModel> bollardCollection);
+
+    void fillEditTextWithStopName(String direction);
+
+    void changePromptToHints();
+
+    void changePromptToRecentSearches();
 }

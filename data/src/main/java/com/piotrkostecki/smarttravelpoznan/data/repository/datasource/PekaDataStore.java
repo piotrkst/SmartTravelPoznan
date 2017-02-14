@@ -1,6 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.data.repository.datasource;
 
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
 
 import java.util.List;
@@ -13,12 +14,11 @@ import rx.Observable;
 public interface PekaDataStore {
 
     /**
-     * Get an {@link rx.Observable} which will emit a List of {@link DirectionEntity}.
+     * Get an {@link rx.Observable} which will emit a List of {@link StopEntity}.
      */
-    Observable<List<DirectionEntity>> directionEntityList(String stopName);
+    Observable<List<StopEntity>> stopEntityList(String stopName);
 
-    /**
-     * Get an {@link rx.Observable} which will emit a {@link TimetableEntity} by its id.
-     */
-    Observable<List<TimetableEntity>> timetableEntityList();
+    Observable<TimetableEntity> timetableEntityList(String bollardSymbol);
+
+    Observable<List<BollardEntity>> bollardEntityList(String stopName);
 }

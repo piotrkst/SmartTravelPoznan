@@ -3,7 +3,9 @@ package com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.PerActivity;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.modules.ActivityModule;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.modules.PekaModule;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.component.DialogBollards;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.MainFragment;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.TimetableListFragment;
 
 import dagger.Component;
 
@@ -15,5 +17,5 @@ import dagger.Component;
 @Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class, PekaModule.class})
 public interface PekaComponent extends ActivityComponent {
     void inject(MainFragment mainFragment);
-//    void inject(TimetableActivity timetableActivity);
+    void inject(TimetableListFragment timetableListFragment);
 }

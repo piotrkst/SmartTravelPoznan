@@ -4,31 +4,46 @@ package com.piotrkostecki.smarttravelpoznan.presentation.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.PekaComponent;
-import com.piotrkostecki.smarttravelpoznan.presentation.model.DirectionModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.BollardModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.StopModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.presenter.MainPresenter;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.StopAdapter;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.CustomLayoutManager;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.component.DialogBollards;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.interfaces.MainView;
 
 import java.util.Collection;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 public class MainFragment extends BaseFragment implements MainView {
 
     public interface DirectionSelectedListener {
-        void navigateToTimetable();
+        void navigateToTimetable(String bollard);
     }
 
     @Inject MainPresenter mainPresenter;
+    @Inject StopAdapter stopAdapter;
+
+    @BindView(R.id.et_stop_name) EditText et_stopName;
+    @BindView(R.id.tv_prompt) TextView tv_prompt;
+    @BindView(R.id.btn_search) Button btn_search;
+    @BindView(R.id.rv_stop_names) RecyclerView rv_directions;
 
     private DirectionSelectedListener directionSelectedListener;
 
@@ -55,6 +70,7 @@ public class MainFragment extends BaseFragment implements MainView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, fragmentView);
+        setupRecyclerView();
         return fragmentView;
     }
 
@@ -79,6 +95,7 @@ public class MainFragment extends BaseFragment implements MainView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        this.rv_directions.setAdapter(null);
     }
 
     @Override
@@ -87,35 +104,71 @@ public class MainFragment extends BaseFragment implements MainView {
         this.mainPresenter.destroy();
     }
 
-    @OnClick(R.id.btn_getDirections)
-    public void getDirections() {
-        Log.i("clicked", "getDirections: clicked");
-        mainPresenter.getDirectionList();
+    @OnClick(R.id.btn_search)
+    public void getBollardList() {
+        mainPresenter.onSearchClick(et_stopName.getText().toString());
+    }
+
+    @OnTextChanged(R.id.et_stop_name)
+    public void getStopNameList() {
+        mainPresenter.onStopNameChanged(et_stopName.getText().toString());
     }
 
     @Override
-    public void showDirections() {
+    public void changePromptToHints() {
+        this.tv_prompt.setText(getString(R.string.tv_prompt_hints));
+    }
+
+    @Override
+    public void changePromptToRecentSearches() {
+        this.tv_prompt.setText(getString(R.string.tv_prompt_recent_searches));
+    }
+
+    @Override
+    public void showStops() {
 
     }
 
     @Override
-    public void hideDirections() {
+    public void hideStops() {
+
+    }
+
+
+    @Override
+    public void renderStopList(Collection<StopModel> directionCollection) {
+        if (directionCollection != null) {
+            this.stopAdapter.setStopCollection(directionCollection);
+        }
+    }
+
+    @Override
+    public void renderBollardList(Collection<BollardModel> bollardCollection) {
+        if (bollardCollection != null) {
+            DialogBollards dialogBollards = new DialogBollards();
+            dialogBollards.setBollardCollection(bollardCollection);
+            dialogBollards.show(getFragmentManager(), "test");
+        }
+    }
+
+    @Override
+    public void fillEditTextWithStopName(String direction) {
+        this.et_stopName.setText(direction);
+    }
+
+    @Override
+    public void showStopListLoading() {
 
     }
 
     @Override
-    public void viewTimetable() {
-        this.directionSelectedListener.navigateToTimetable();
-    }
-
-    @Override
-    public void renderDirectionList(Collection<DirectionModel> directionCollection) {
+    public void hideStopListLoading() {
 
     }
 
     @Override
     public void showLoading() {
-        Log.i("test'", "showLoading: loading");
+
     }
 
     @Override
@@ -137,6 +190,19 @@ public class MainFragment extends BaseFragment implements MainView {
     public void showError(String message) {
 
     }
+
+    private void setupRecyclerView() {
+        this.stopAdapter.setOnItemClickListener(onItemClickListener);
+        this.rv_directions.setLayoutManager(new CustomLayoutManager(context()));
+        this.rv_directions.setAdapter(stopAdapter);
+    }
+
+    private StopAdapter.OnItemClickListener onItemClickListener =
+            stopModel -> {
+                if (MainFragment.this.mainPresenter != null && stopModel != null) {
+                    MainFragment.this.mainPresenter.onDirectionClick(stopModel);
+                }
+            };
 
     @Override
     public Context context() {

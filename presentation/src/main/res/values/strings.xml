@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">SmartTravel</string>
-    <string name="get_timetable">Search</string>
 
+    <string name="btn_get_direction">Search</string>
     <string name="btn_text_retry">Retry</string>
-    
+
+    <string name="hint_enter_stop_name">Enter stop name</string>
+
+    <string name="tv_prompt_recent_searches">Recent searches</string>
+    <string name="tv_prompt_hints">Did you mean&#8230;?</string>
+
+    <string name="dialog_header">Choose your direction</string>
+
     // Exception messages
     <string name="exception_message_generic">There was an application error</string>
     <string name="exception_message_no_connection">There is no internet connection</string>

@@ -2,30 +2,37 @@ package com.piotrkostecki.smarttravelpoznan.data.entity;
 
 
 public class DirectionEntity {
+    private boolean returnVariant;
+    private String direction;
+    private String lineName;
 
-    private String stopName;
-    private String directionContent;
-
-    public DirectionEntity() {
+    public DirectionEntity(boolean returnVariant, String direction, String lineName) {
+        this.returnVariant = returnVariant;
+        this.direction = direction;
+        this.lineName = lineName;
     }
 
-    public DirectionEntity(String directionContent) {
-        this.directionContent = directionContent;
+    public boolean isReturnVariant() {
+        return returnVariant;
     }
 
-    public String getStopName() {
-        return stopName;
+    public void setReturnVariant(boolean returnVariant) {
+        this.returnVariant = returnVariant;
     }
 
-    public void setStopName(String stopName) {
-        this.stopName = stopName;
+    public String getDirection() {
+        return direction;
     }
 
-    public String getDirectionContent() {
-        return directionContent;
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
-    public void setDirectionContent(String directionContent) {
-        this.directionContent = directionContent;
+    public String getLineName() {
+        return lineName;
+    }
+
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
     }
 }

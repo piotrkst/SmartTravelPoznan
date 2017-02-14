@@ -2,8 +2,8 @@ package com.piotrkostecki.smarttravelpoznan.presentation.internal.di.modules;
 
 import android.content.Context;
 
-import com.piotrkostecki.smarttravelpoznan.data.cache.DirectionCache;
-import com.piotrkostecki.smarttravelpoznan.data.cache.DirectionCacheImpl;
+import com.piotrkostecki.smarttravelpoznan.data.cache.StopCache;
+import com.piotrkostecki.smarttravelpoznan.data.cache.StopCacheImpl;
 import com.piotrkostecki.smarttravelpoznan.data.executor.JobExecutor;
 import com.piotrkostecki.smarttravelpoznan.data.repository.PekaDataRepository;
 import com.piotrkostecki.smarttravelpoznan.domain.executor.PostExecutionThread;
@@ -11,7 +11,6 @@ import com.piotrkostecki.smarttravelpoznan.domain.executor.ThreadExecutor;
 import com.piotrkostecki.smarttravelpoznan.domain.repository.PekaRepository;
 import com.piotrkostecki.smarttravelpoznan.presentation.AndroidApplication;
 import com.piotrkostecki.smarttravelpoznan.presentation.UIThread;
-import com.piotrkostecki.smarttravelpoznan.presentation.navigation.Navigator;
 
 import javax.inject.Singleton;
 
@@ -44,7 +43,8 @@ public class ApplicationModule {
         return uiThread;
     }
 
-    @Provides @Singleton DirectionCache provideDirectionCache(DirectionCacheImpl directionCache) {
+    @Provides @Singleton
+    StopCache provideStopNameListCache(StopCacheImpl directionCache) {
         return directionCache;
     }
 

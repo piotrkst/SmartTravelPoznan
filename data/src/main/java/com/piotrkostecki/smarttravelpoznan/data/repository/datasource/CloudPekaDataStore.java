@@ -1,10 +1,10 @@
 package com.piotrkostecki.smarttravelpoznan.data.repository.datasource;
 
-import com.piotrkostecki.smarttravelpoznan.data.cache.DirectionCache;
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
+import com.piotrkostecki.smarttravelpoznan.data.cache.StopCache;
+import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
 import com.piotrkostecki.smarttravelpoznan.data.net.RestApi;
-import com.piotrkostecki.smarttravelpoznan.domain.model.Direction;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ import rx.functions.Action1;
 public class CloudPekaDataStore implements PekaDataStore {
 
     private final RestApi restApi;
-    private final DirectionCache directionCache;
+    private final StopCache stopCache;
 
-    private final Action1<DirectionEntity> saveToCacheAction = directionEntity -> {
+    private final Action1<StopEntity> saveToCacheAction = directionEntity -> {
         if (directionEntity != null) {
-            CloudPekaDataStore.this.directionCache.put(directionEntity);
+            CloudPekaDataStore.this.stopCache.put(directionEntity);
         }
     };
 
@@ -29,20 +29,25 @@ public class CloudPekaDataStore implements PekaDataStore {
      * Construct a {@link PekaDataStore} based on connections to the api (Cloud).
      *
      * @param restApi The {@link RestApi} implementation to use.
-     * @param directionCache A {@link DirectionCache} to cache data retrieved from the api.
+     * @param stopCache A {@link StopCache} to cache data retrieved from the api.
      */
-    CloudPekaDataStore(RestApi restApi, DirectionCache directionCache) {
+    CloudPekaDataStore(RestApi restApi, StopCache stopCache) {
         this.restApi = restApi;
-        this.directionCache = directionCache;
+        this.stopCache = stopCache;
     }
 
     @Override
-    public Observable<List<TimetableEntity>> timetableEntityList() {
-        return this.restApi.timetableEntityList();
+    public Observable<TimetableEntity> timetableEntityList(String bollardSymbol) {
+        return this.restApi.timetableEntityList(bollardSymbol);
     }
 
     @Override
-    public Observable<List<DirectionEntity>> directionEntityList(String stopName) {
-        return restApi.directionEntityList(stopName);
+    public Observable<List<StopEntity>> stopEntityList(String stopName) {
+        return this.restApi.stopEntityList(stopName);
+    }
+
+    @Override
+    public Observable<List<BollardEntity>> bollardEntityList(String stopName) {
+        return this.restApi.bollardEntityList(stopName);
     }
 }

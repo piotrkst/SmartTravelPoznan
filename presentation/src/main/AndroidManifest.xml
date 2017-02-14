@@ -21,6 +21,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".view.activity.MainActivity"/>
+    <activity android:name=".view.activity.TimetableActivity"/>
     <activity android:name=".view.activity.SplashActivity"/>
 
   </application>

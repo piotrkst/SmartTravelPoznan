@@ -2,7 +2,8 @@ package com.piotrkostecki.smarttravelpoznan.presentation.internal.di.modules;
 
 import com.piotrkostecki.smarttravelpoznan.domain.executor.PostExecutionThread;
 import com.piotrkostecki.smarttravelpoznan.domain.executor.ThreadExecutor;
-import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetDirections;
+import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetBollards;
+import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetStops;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetTimetables;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.UseCase;
 import com.piotrkostecki.smarttravelpoznan.domain.repository.PekaRepository;
@@ -28,11 +29,11 @@ public class PekaModule {
         this.stopName = stopName;
     }
 
-    @Provides @PerActivity @Named("directions")
-    UseCase provideGetDirectionUseCase(PekaRepository pekaRepository,
-                                       ThreadExecutor threadExecutor,
-                                       PostExecutionThread postExecutionThread) {
-        return new GetDirections(stopName, pekaRepository, threadExecutor, postExecutionThread);
+    @Provides @PerActivity @Named("stops")
+    UseCase provideGetStopNameListUseCase(PekaRepository pekaRepository,
+                                          ThreadExecutor threadExecutor,
+                                          PostExecutionThread postExecutionThread) {
+        return new GetStops(pekaRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides @PerActivity @Named("timetables")
@@ -40,5 +41,12 @@ public class PekaModule {
                                        ThreadExecutor threadExecutor,
                                        PostExecutionThread postExecutionThread) {
         return new GetTimetables(threadExecutor, postExecutionThread, pekaRepository);
+    }
+
+    @Provides @PerActivity @Named("bollards")
+    UseCase provideGetBollardListUseCase(PekaRepository pekaRepository,
+                                         ThreadExecutor threadExecutor,
+                                         PostExecutionThread postExecutionThread) {
+        return new GetBollards(pekaRepository, threadExecutor, postExecutionThread);
     }
 }

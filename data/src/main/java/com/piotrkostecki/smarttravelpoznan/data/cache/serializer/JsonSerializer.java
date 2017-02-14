@@ -1,7 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.data.cache.serializer;
 
 import com.google.gson.Gson;
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,10 +20,10 @@ public class JsonSerializer {
     /**
      * Serialize an object to Json.
      *
-     * @param directionEntity {@link DirectionEntity} to serialize.
+     * @param stopEntity {@link StopEntity} to serialize.
      */
-    public String serialize(DirectionEntity directionEntity) {
-        String jsonString = gson.toJson(directionEntity, DirectionEntity.class);
+    public String serialize(StopEntity stopEntity) {
+        String jsonString = gson.toJson(stopEntity, StopEntity.class);
         return jsonString;
     }
 
@@ -31,10 +31,10 @@ public class JsonSerializer {
      * Deserialize a json representation of an object.
      *
      * @param jsonString A json string to deserialize.
-     * @return {@link DirectionEntity}
+     * @return {@link StopEntity}
      */
-    public DirectionEntity deserialize(String jsonString) {
-        DirectionEntity directionEntity = gson.fromJson(jsonString, DirectionEntity.class);
-        return directionEntity;
+    public StopEntity deserialize(String jsonString) {
+        StopEntity stopEntity = gson.fromJson(jsonString, StopEntity.class);
+        return stopEntity;
     }
 }

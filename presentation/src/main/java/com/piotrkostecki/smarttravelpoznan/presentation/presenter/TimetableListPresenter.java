@@ -1,15 +1,20 @@
 package com.piotrkostecki.smarttravelpoznan.presentation.presenter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.piotrkostecki.smarttravelpoznan.domain.exception.DefaultErrorBundle;
 import com.piotrkostecki.smarttravelpoznan.domain.exception.ErrorBundle;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.DefaultSubscriber;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.UseCase;
-import com.piotrkostecki.smarttravelpoznan.domain.model.Direction;
+import com.piotrkostecki.smarttravelpoznan.domain.model.Stop;
+import com.piotrkostecki.smarttravelpoznan.domain.model.Timetable;
 import com.piotrkostecki.smarttravelpoznan.presentation.exception.ErrorMessageFactory;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.PerActivity;
-import com.piotrkostecki.smarttravelpoznan.presentation.mapper.DirectionModelDataMapper;
-import com.piotrkostecki.smarttravelpoznan.presentation.model.DirectionModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.mapper.StopModelDataMapper;
+import com.piotrkostecki.smarttravelpoznan.presentation.mapper.TimetableModelDataMapper;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.StopModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.TimetableModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.interfaces.TimetableListView;
 
 import java.util.Collection;
@@ -28,12 +33,12 @@ public class TimetableListPresenter implements Presenter {
     private TimetableListView viewListView;
 
     private final UseCase getTimetableListUseCase;
-    private final DirectionModelDataMapper directionModelDataMapper;
+    private final TimetableModelDataMapper timetableModelDataMapper;
 
     @Inject public TimetableListPresenter(@Named("timetables") UseCase getTimetableListUseCase,
-                                          DirectionModelDataMapper directionModelDataMapper) {
+                                          TimetableModelDataMapper timetableModelDataMapper) {
         this.getTimetableListUseCase = getTimetableListUseCase;
-        this.directionModelDataMapper = directionModelDataMapper;
+        this.timetableModelDataMapper = timetableModelDataMapper;
     }
 
     public void setView(@NonNull TimetableListView view) {
@@ -53,20 +58,21 @@ public class TimetableListPresenter implements Presenter {
      * Initializes the presenter by start retrieving the user list.
      */
     public void initialize() {
-        this.loadTimetableList();
+        Log.i("test", "initialize: " + getBollardSymbol());
+        this.loadTimetableList(getBollardSymbol());
+    }
+
+    private String getBollardSymbol() {
+        return this.viewListView.getBollardSymbol();
     }
 
     /**
      * Loads all users.
      */
-    private void loadTimetableList() {
+    private void loadTimetableList(String bollardSymbol) {
         this.hideViewRetry();
         this.showViewLoading();
-        this.getTimetableList();
-    }
-
-    public void onTimetableClicked(DirectionModel directionModel) {
-        this.viewListView.viewTimetable(directionModel);
+        this.getTimetableList(bollardSymbol);
     }
 
     private void showViewLoading() {
@@ -91,17 +97,26 @@ public class TimetableListPresenter implements Presenter {
         this.viewListView.showError(errorMessage);
     }
 
-    private void showTimetableCollectionInView(Collection<Direction> directionCollection) {
-        final Collection<DirectionModel> directionModelCollection =
-                this.directionModelDataMapper.transform(directionCollection);
-        this.viewListView.renderTimetableList(directionModelCollection);
+    private void showTimetableInView(Timetable timetable) {
+        final TimetableModel timetableModel =
+                this.timetableModelDataMapper.transform(timetable);
+        this.viewListView.renderTimetableList(timetableModel);
     }
 
-    private void getTimetableList() {
-        this.getTimetableListUseCase.execute(new TimetableListSubscriber());
+    private void getTimetableList(String bollardSymbol) {
+        this.getTimetableListUseCase.execute(new TimetableListSubscriber(), bollardSymbol);
     }
 
-    private final class TimetableListSubscriber extends DefaultSubscriber<List<Direction>> {
+    private final class TimetableListSubscriber extends DefaultSubscriber<Timetable> {
 
+        @Override public void onError(Throwable e) {
+            TimetableListPresenter.this.hideViewLoading();
+            TimetableListPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
+            TimetableListPresenter.this.showViewRetry();
+        }
+
+        @Override public void onNext(Timetable bollards) {
+            TimetableListPresenter.this.showTimetableInView(bollards);
+        }
     }
 }

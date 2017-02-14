@@ -1,7 +1,8 @@
 package com.piotrkostecki.smarttravelpoznan.data.repository.datasource;
 
-import com.piotrkostecki.smarttravelpoznan.data.cache.DirectionCache;
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
+import com.piotrkostecki.smarttravelpoznan.data.cache.StopCache;
+import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
 
 import java.util.List;
@@ -13,26 +14,32 @@ import rx.Observable;
  */
 public class DiskPekaDataStore implements PekaDataStore {
 
-    private final DirectionCache directionCache;
+    private final StopCache stopCache;
 
     /**
      * Construct a {@link PekaDataStore} based file system data store.
      *
-     * @param directionCache A {@link DirectionCache} to cache data retrieved from the api.
+     * @param stopCache A {@link StopCache} to cache data retrieved from the api.
      */
-    DiskPekaDataStore(DirectionCache directionCache) {
-        this.directionCache = directionCache;
+    DiskPekaDataStore(StopCache stopCache) {
+        this.stopCache = stopCache;
     }
 
     @Override
-    public Observable<List<TimetableEntity>> timetableEntityList() {
+    public Observable<TimetableEntity> timetableEntityList(String bollardSymbol) {
         // TODO: implement simple cache for storing/retrieving collections of timetables.
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Observable<List<DirectionEntity>> directionEntityList(String busStop) {
-        // TODO: implement simple cache for storing/retrieving collections of directions
+    public Observable<List<StopEntity>> stopEntityList(String stopName) {
+        // TODO: implement simple cache for storing/retrieving collections of stops
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Observable<List<BollardEntity>> bollardEntityList(String stopName) {
+        // TODO: implement simple cache for storing/retrieving collections of stops
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

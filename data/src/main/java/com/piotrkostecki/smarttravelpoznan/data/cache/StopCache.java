@@ -1,26 +1,26 @@
 package com.piotrkostecki.smarttravelpoznan.data.cache;
 
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 
 import rx.Observable;
 
 /**
  * An interface representing a direction Cache.
  */
-public interface DirectionCache {
+public interface StopCache {
     /**
-     * Gets an {@link rx.Observable} which will emit a {@link DirectionEntity}.
+     * Gets an {@link rx.Observable} which will emit a {@link StopEntity}.
      *
      * @param stopName The user id to retrieve data.
      */
-    Observable<DirectionEntity> get(final String stopName);
+    Observable<StopEntity> get(final String stopName);
 
     /**
      * Puts and element into the cache.
      *
-     * @param directionEntity Element to insert in the cache.
+     * @param stopEntity Element to insert in the cache.
      */
-    void put(DirectionEntity directionEntity);
+    void put(StopEntity stopEntity);
 
     /**
      * Checks if an element (User) exists in the cache.

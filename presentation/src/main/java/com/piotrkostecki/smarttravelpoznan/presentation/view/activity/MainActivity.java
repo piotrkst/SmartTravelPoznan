@@ -3,17 +3,23 @@ package com.piotrkostecki.smarttravelpoznan.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.HasComponent;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.DaggerPekaComponent;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.PekaComponent;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.BollardModel;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.BollardAdapter;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.component.DialogBollards;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.MainFragment;
 
 /**
  * Main application screen.
  */
-public class MainActivity extends BaseActivity implements HasComponent<PekaComponent>, MainFragment.DirectionSelectedListener {
+public class MainActivity extends BaseActivity implements HasComponent<PekaComponent>,
+        MainFragment.DirectionSelectedListener,
+        BollardAdapter.OnItemClickListener {
 
     private PekaComponent pekaComponent;
 
@@ -44,7 +50,12 @@ public class MainActivity extends BaseActivity implements HasComponent<PekaCompo
     }
 
     @Override
-    public void navigateToTimetable() {
-        navigator.navigateToTimetableActivity(this);
+    public void navigateToTimetable(String bollardSymbol) {
+        navigator.navigateToTimetableActivity(this, bollardSymbol);
+    }
+
+    @Override
+    public void onBollardItemClicked(BollardModel bollardModel) {
+        navigateToTimetable(bollardModel.getBollardInfo().getSymbol());
     }
 }

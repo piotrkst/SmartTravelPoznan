@@ -3,8 +3,8 @@ package com.piotrkostecki.smarttravelpoznan.data.cache;
 import android.content.Context;
 
 import com.piotrkostecki.smarttravelpoznan.data.cache.serializer.JsonSerializer;
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
-import com.piotrkostecki.smarttravelpoznan.data.exception.DirectionNotFoundException;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
+import com.piotrkostecki.smarttravelpoznan.data.exception.StopNotFoundException;
 import com.piotrkostecki.smarttravelpoznan.domain.executor.ThreadExecutor;
 
 import java.io.File;
@@ -14,9 +14,9 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * {@link DirectionCache} implementation.
+ * {@link StopCache} implementation.
  */
-public class DirectionCacheImpl implements DirectionCache {
+public class StopCacheImpl implements StopCache {
 
     private static final String SETTINGS_FILE_NAME = "com.piotrkostecki.smarttravelpoznan.SETTINGS";
     private static final String SETTINGS_KEY_LAST_CACHE_UPDATE = "last_cache_update";
@@ -31,15 +31,15 @@ public class DirectionCacheImpl implements DirectionCache {
     private final ThreadExecutor threadExecutor;
 
     /**
-    * Constructor of the class {@link DirectionCacheImpl}.
+    * Constructor of the class {@link StopCacheImpl}.
     *
     * @param context A
     * @param directionCacheSerializer {@link JsonSerializer} for object serialization.
     * @param fileManager {@link FileManager} for saving serialized objects to the file system.
     * */
     @Inject
-    public DirectionCacheImpl(Context context, JsonSerializer directionCacheSerializer,
-                              FileManager fileManager, ThreadExecutor executor) {
+    public StopCacheImpl(Context context, JsonSerializer directionCacheSerializer,
+                         FileManager fileManager, ThreadExecutor executor) {
         if (context == null || directionCacheSerializer == null || fileManager == null || executor == null) {
             throw new IllegalArgumentException("Invalid null parameter");
         }
@@ -51,27 +51,27 @@ public class DirectionCacheImpl implements DirectionCache {
     }
 
     @Override
-    public Observable<DirectionEntity> get(String stopName) {
+    public Observable<StopEntity> get(String stopName) {
         return Observable.create(subscriber -> {
-            File directionEntityFile = DirectionCacheImpl.this.buildFile(stopName);
-            String fileContent = DirectionCacheImpl.this.fileManager.readFileContent(directionEntityFile);
-            DirectionEntity directionEntity = DirectionCacheImpl.this.serializer.deserialize(fileContent);
+            File directionEntityFile = StopCacheImpl.this.buildFile(stopName);
+            String fileContent = StopCacheImpl.this.fileManager.readFileContent(directionEntityFile);
+            StopEntity stopEntity = StopCacheImpl.this.serializer.deserialize(fileContent);
 
-            if (directionEntity != null) {
-                subscriber.onNext(directionEntity);
+            if (stopEntity != null) {
+                subscriber.onNext(stopEntity);
                 subscriber.onCompleted();
             } else {
-                subscriber.onError(new DirectionNotFoundException());
+                subscriber.onError(new StopNotFoundException());
             }
         });
     }
 
     @Override
-    public void put(DirectionEntity directionEntity) {
-        if (directionEntity != null) {
-            File directionEntityFile = this.buildFile(directionEntity.getStopName());
-            if (!isCached(directionEntity.getStopName())) {
-                String jsonString = this.serializer.serialize(directionEntity);
+    public void put(StopEntity stopEntity) {
+        if (stopEntity != null) {
+            File directionEntityFile = this.buildFile(stopEntity.getSymbol());
+            if (!isCached(stopEntity.getSymbol())) {
+                String jsonString = this.serializer.serialize(stopEntity);
                 this.executeAsynchronously(new CacheWriter(this.fileManager, directionEntityFile, jsonString));
                 setLastCacheUpdateTimeMillis();
             }

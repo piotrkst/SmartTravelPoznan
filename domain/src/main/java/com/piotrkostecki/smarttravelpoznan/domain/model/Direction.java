@@ -1,24 +1,39 @@
 package com.piotrkostecki.smarttravelpoznan.domain.model;
 
-/**
- * Class that represents a Direction in the domain layer.
- */
+
 public class Direction {
 
-    private String directionContent;
+    private boolean returnVariant;
+    private String direction;
+    private String lineName;
 
-    public Direction() {
+    public Direction(boolean returnVariant, String direction, String lineName) {
+        this.returnVariant = returnVariant;
+        this.direction = direction;
+        this.lineName = lineName;
     }
 
-    public Direction(String directionContent) {
-        this.directionContent = directionContent;
+    public boolean isReturnVariant() {
+        return returnVariant;
     }
 
-    public String getDirectionContent() {
-        return directionContent;
+    public void setReturnVariant(boolean returnVariant) {
+        this.returnVariant = returnVariant;
     }
 
-    public void setDirectionContent(String directionContent) {
-        this.directionContent = directionContent;
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public String getLineName() {
+        return lineName;
+    }
+
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
     }
 }

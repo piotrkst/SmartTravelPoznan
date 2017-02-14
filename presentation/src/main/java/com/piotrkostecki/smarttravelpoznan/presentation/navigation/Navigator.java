@@ -38,9 +38,10 @@ public class Navigator {
             context.startActivity(intentToLaunch);
         }
     }
-    public void navigateToTimetableActivity(Context context) {
+    public void navigateToTimetableActivity(Context context, String bollardSymbol) {
         if (context != null) {
             Intent intentToLaunch = TimetableActivity.getCallingIntent(context);
+            intentToLaunch.putExtra(Constants.BOLLARD_SYMBOL, bollardSymbol);
             context.startActivity(intentToLaunch);
         }
     }

@@ -1,9 +1,15 @@
 package com.piotrkostecki.smarttravelpoznan.data.entity.mapper;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.piotrkostecki.smarttravelpoznan.data.entity.DirectionEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
 
 import java.lang.reflect.Type;
@@ -23,23 +29,50 @@ public class PekaEntityJsonMapper {
         this.gson = new Gson();
     }
 
-    public List<DirectionEntity> transformDirectionEntityCollection(String directionListJsonResponse) throws JsonSyntaxException {
-        List<DirectionEntity> directionEntityCollection;
+    public List<StopEntity> transformStopEntityCollection(String stopListJsonResponse) throws JsonSyntaxException {
+        JsonParser parser = new JsonParser();
+        List<StopEntity> stopEntityCollection;
+        JsonArray stopListJsonArrayResponse = parser.parse(stopListJsonResponse).getAsJsonObject().get("success").getAsJsonArray();
         try {
-            Type listOfDirectionEntityType = new TypeToken<List<DirectionEntity>>() {}.getType();
-            directionEntityCollection = this.gson.fromJson(directionListJsonResponse, listOfDirectionEntityType);
+            Type listOfStopEntityType = new TypeToken<List<StopEntity>>() {}.getType();
+            stopEntityCollection = this.gson.fromJson(stopListJsonArrayResponse, listOfStopEntityType);
 
-            return directionEntityCollection;
+            return stopEntityCollection;
         } catch (JsonSyntaxException jsonException) {
+            jsonException.printStackTrace();
+            throw jsonException;
+        }
+
+    }
+
+    public List<BollardEntity> transformBollardEntityCollection(String bollardListJsonResponse) throws JsonSyntaxException {
+        JsonParser parser = new JsonParser();
+        List<BollardEntity> bollardEntityCollection;
+        JsonArray bollardListJsonArrayResponse = parser.parse(bollardListJsonResponse)
+                .getAsJsonObject().get("success")
+                .getAsJsonObject().get("bollards")
+                .getAsJsonArray();
+        try {
+            Type listOfBollardEntityType = new TypeToken<List<BollardEntity>>() {}.getType();
+            bollardEntityCollection = this.gson.fromJson(bollardListJsonArrayResponse, listOfBollardEntityType);
+
+            return bollardEntityCollection;
+        } catch (JsonSyntaxException jsonException) {
+            jsonException.printStackTrace();
             throw jsonException;
         }
     }
 
-    public List<TimetableEntity> transformTimetableEntityCollection(String timetableListJsonResponse) throws JsonSyntaxException {
-        List<TimetableEntity> timetableEntityCollection;
+    public TimetableEntity transformTimetableEntityCollection(String timetableListJsonResponse) throws JsonSyntaxException {
+        JsonParser parser = new JsonParser();
+        TimetableEntity timetableEntityCollection;
+        JsonObject timetableJsonObjectResponse = parser.parse(timetableListJsonResponse)
+                .getAsJsonObject().get("success")
+                .getAsJsonObject();
         try {
-            Type listOfTimetableEntityType = new TypeToken<List<TimetableEntity>>() {}.getType();
-            timetableEntityCollection = this.gson.fromJson(timetableListJsonResponse, listOfTimetableEntityType);
+            Log.i("test", "transformTimetableEntityCollection: " + timetableJsonObjectResponse.toString());
+            Type listOfTimetableEntityType = new TypeToken<TimetableEntity>() {}.getType();
+            timetableEntityCollection = this.gson.fromJson(timetableJsonObjectResponse, listOfTimetableEntityType);
 
             return timetableEntityCollection;
         } catch (JsonSyntaxException jsonException) {

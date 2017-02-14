@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_getDirections"
+    <EditText
+        android:id="@+id/et_stop_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/get_timetable"
-        />
+        android:hint="@string/hint_enter_stop_name" />
+
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_stop_name"
+        android:text="@string/btn_get_direction" />
+
+    <TextView
+        android:id="@+id/tv_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_prompt_recent_searches"
+        android:layout_below="@id/btn_search"
+        android:textColor="@android:color/darker_gray"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_stop_names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_prompt" />
 
 </RelativeLayout>

@@ -3,7 +3,8 @@ package com.piotrkostecki.smarttravelpoznan.data.repository;
 import com.piotrkostecki.smarttravelpoznan.data.entity.mapper.PekaEntityDataMapper;
 import com.piotrkostecki.smarttravelpoznan.data.repository.datasource.PekaDataStore;
 import com.piotrkostecki.smarttravelpoznan.data.repository.datasource.PekaDataStoreFactory;
-import com.piotrkostecki.smarttravelpoznan.domain.model.Direction;
+import com.piotrkostecki.smarttravelpoznan.domain.model.Bollard;
+import com.piotrkostecki.smarttravelpoznan.domain.model.Stop;
 import com.piotrkostecki.smarttravelpoznan.domain.model.Timetable;
 import com.piotrkostecki.smarttravelpoznan.domain.repository.PekaRepository;
 
@@ -37,14 +38,20 @@ public class PekaDataRepository implements PekaRepository {
     }
 
     @Override
-    public Observable<List<Direction>> directions(String stopName) {
+    public Observable<List<Stop>> stops(String stopName) {
         final PekaDataStore pekaDataStore = this.pekaDataStoreFactory.create(stopName);
-        return pekaDataStore.directionEntityList(stopName).map(this.pekaEntityDataMapper::transformDirection);
+        return pekaDataStore.stopEntityList(stopName).map(this.pekaEntityDataMapper::transformStop);
     }
 
     @Override
-    public Observable<List<Timetable>> timetables() {
+    public Observable<List<Bollard>> bollards(String stopName) {
+        final PekaDataStore pekaDataStore = this.pekaDataStoreFactory.create(stopName);
+        return pekaDataStore.bollardEntityList(stopName).map(this.pekaEntityDataMapper::transformBollard);
+    }
+
+    @Override
+    public Observable<Timetable> timetables(String bollardSymbol) {
         final PekaDataStore pekaDataStore = this.pekaDataStoreFactory.createCloudDataStore();
-        return pekaDataStore.timetableEntityList().map(this.pekaEntityDataMapper::transformTimetable);
+        return pekaDataStore.timetableEntityList(bollardSymbol).map(this.pekaEntityDataMapper::transform);
     }
 }

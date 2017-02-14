@@ -56,6 +56,7 @@ dependencies {
   provided dataDependencies.javaxAnnotation
   compile dataDependencies.javaxInject
   compile dataDependencies.okHttp
+  compile dataDependencies.okHttpLogging
   compile dataDependencies.gson
   compile dataDependencies.rxJava
   compile dataDependencies.rxAndroid

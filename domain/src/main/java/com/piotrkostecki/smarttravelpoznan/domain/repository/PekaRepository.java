@@ -1,6 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.domain.repository;
 
-import com.piotrkostecki.smarttravelpoznan.domain.model.Direction;
+import com.piotrkostecki.smarttravelpoznan.domain.model.Bollard;
+import com.piotrkostecki.smarttravelpoznan.domain.model.Stop;
 import com.piotrkostecki.smarttravelpoznan.domain.model.Timetable;
 
 import java.util.List;
@@ -12,7 +13,9 @@ import rx.Observable;
  */
 public interface PekaRepository {
 
-    Observable<List<Direction>> directions(String stopName);
+    Observable<List<Stop>> stops(String stopName);
 
-    Observable<List<Timetable>> timetables();
+    Observable<List<Bollard>> bollards(String stopName);
+
+    Observable<Timetable> timetables(String bollardSymbol);
 }

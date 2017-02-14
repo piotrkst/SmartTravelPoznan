@@ -21,7 +21,7 @@ public class GetTimetables extends UseCase {
         this.pekaRepository = pekaRepository;
     }
 
-    @Override protected Observable buildUseCaseObservable() {
-        return this.pekaRepository.timetables();
+    @Override protected Observable buildUseCaseObservable(Object... params) {
+        return this.pekaRepository.timetables((String) params[0]);
     }
 }

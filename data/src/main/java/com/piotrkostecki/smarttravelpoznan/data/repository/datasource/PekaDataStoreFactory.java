@@ -3,7 +3,7 @@ package com.piotrkostecki.smarttravelpoznan.data.repository.datasource;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.piotrkostecki.smarttravelpoznan.data.cache.DirectionCache;
+import com.piotrkostecki.smarttravelpoznan.data.cache.StopCache;
 import com.piotrkostecki.smarttravelpoznan.data.entity.mapper.PekaEntityJsonMapper;
 import com.piotrkostecki.smarttravelpoznan.data.net.RestApi;
 import com.piotrkostecki.smarttravelpoznan.data.net.RestApiImpl;
@@ -18,12 +18,12 @@ import javax.inject.Singleton;
 public class PekaDataStoreFactory {
 
     private final Context context;
-    private final DirectionCache directionCache;
+    private final StopCache stopCache;
 
     @Inject
-    public PekaDataStoreFactory(@NonNull Context context, @NonNull DirectionCache directionCache) {
+    public PekaDataStoreFactory(@NonNull Context context, @NonNull StopCache stopCache) {
         this.context = context.getApplicationContext();
-        this.directionCache = directionCache;
+        this.stopCache = stopCache;
     }
 
     /**
@@ -32,8 +32,8 @@ public class PekaDataStoreFactory {
     public PekaDataStore create(String stopName) {
         PekaDataStore pekaDataStore;
 
-        if (!this.directionCache.isExpired() && this.directionCache.isCached(stopName)) {
-            pekaDataStore = new DiskPekaDataStore(this.directionCache);
+        if (!this.stopCache.isExpired() && this.stopCache.isCached(stopName)) {
+            pekaDataStore = new DiskPekaDataStore(this.stopCache);
         } else {
             pekaDataStore = createCloudDataStore();
         }
@@ -48,6 +48,6 @@ public class PekaDataStoreFactory {
         PekaEntityJsonMapper pekaEntityJsonMapper = new PekaEntityJsonMapper();
         RestApi restApi = new RestApiImpl(this.context, pekaEntityJsonMapper);
 
-        return new CloudPekaDataStore(restApi, this.directionCache);
+        return new CloudPekaDataStore(restApi, this.stopCache);
     }
 }
