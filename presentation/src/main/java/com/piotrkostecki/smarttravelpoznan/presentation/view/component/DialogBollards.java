@@ -22,13 +22,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class DialogBollards extends DialogFragment {
+public class DialogBollards extends DialogFragment implements BollardAdapter.OnItemClickListener {
 
-    private BollardAdapter bollardAdapter;
+    public interface BollardListListener {
+        void onBollardClicked(BollardModel bollardModel);
+    }
 
     @BindView(R.id.rv_bollards) RecyclerView rv_bollards;
 
-    public Context context;
+    private Context context;
+    private BollardAdapter bollardAdapter;
+    private BollardListListener bollardListListener;
     private Collection<BollardModel> bollardModelCollection;
 
     @NonNull
@@ -49,13 +53,17 @@ public class DialogBollards extends DialogFragment {
         super.onAttach(context);
         this.context = context;
         this.bollardAdapter = new BollardAdapter(context);
-        this.bollardAdapter.setOnItemClickListener((BollardAdapter.OnItemClickListener) context);
+        this.bollardAdapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        rv_bollards.setAdapter(null);
+        this.rv_bollards.setAdapter(null);
+    }
+
+    public void setOnBollardClickListener(BollardListListener bollardClickListener) {
+        this.bollardListListener = bollardClickListener;
     }
 
     private void setupRecyclerView() {
@@ -70,5 +78,11 @@ public class DialogBollards extends DialogFragment {
 
     private void initializeAdapter() {
         this.bollardAdapter.setBollardCollection(bollardModelCollection);
+    }
+
+    @Override
+    public void onBollardItemClicked(BollardModel bollardModel) {
+        this.bollardListListener.onBollardClicked(bollardModel);
+        this.dismiss();
     }
 }

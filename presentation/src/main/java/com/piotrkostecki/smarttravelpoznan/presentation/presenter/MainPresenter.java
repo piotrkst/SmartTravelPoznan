@@ -62,6 +62,10 @@ public class MainPresenter implements Presenter {
         this.viewMainView = null;
     }
 
+    public void onBollardClicked(BollardModel bollardModel) {
+        this.viewMainView.navigateToTimetable(bollardModel);
+    }
+
     public void onSearchClick(final String stopName) {
         this.showDirectionLoading();
         this.getBollardListUseCase.execute(new BollardSubscriber(), verifyStopName(stopName));

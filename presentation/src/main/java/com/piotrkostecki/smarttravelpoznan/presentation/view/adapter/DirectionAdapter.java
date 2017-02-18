@@ -25,10 +25,17 @@ public class DirectionAdapter extends RecyclerView.Adapter<DirectionAdapter.Dire
     private List<Direction> directionCollection;
     private final LayoutInflater layoutInflater;
 
+    interface OnChildRecyclerViewClickListener {
+        void onClicked();
+    }
+
+    private OnChildRecyclerViewClickListener setOnClick;
+
     @Inject
-    public DirectionAdapter(Context context) {
+    public DirectionAdapter(Context context, OnChildRecyclerViewClickListener setOnClick) {
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.directionCollection = Collections.emptyList();
+        this.setOnClick = setOnClick;
     }
 
     @Override
@@ -39,6 +46,7 @@ public class DirectionAdapter extends RecyclerView.Adapter<DirectionAdapter.Dire
     @Override
     public DirectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = this.layoutInflater.inflate(R.layout.row_direction, parent, false);
+        view.setOnClickListener(click -> setOnClick.onClicked());
         return new DirectionViewHolder(view);
     }
 

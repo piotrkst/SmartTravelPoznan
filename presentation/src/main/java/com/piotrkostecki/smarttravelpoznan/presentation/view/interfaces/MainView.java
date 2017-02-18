@@ -24,4 +24,6 @@ public interface MainView extends LoadDataView {
     void changePromptToHints();
 
     void changePromptToRecentSearches();
+
+    void navigateToTimetable(BollardModel bollardModel);
 }

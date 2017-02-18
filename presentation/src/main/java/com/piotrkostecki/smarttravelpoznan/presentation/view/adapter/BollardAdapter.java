@@ -32,7 +32,7 @@ public class BollardAdapter extends RecyclerView.Adapter<BollardAdapter.BollardV
     private final LayoutInflater layoutInflater;
     private Context context;
 
-    private BollardAdapter.OnItemClickListener onItemClickListener;
+    private OnItemClickListener onItemClickListener;
 
     public BollardAdapter(Context context) {
         this.context = context;
@@ -56,11 +56,11 @@ public class BollardAdapter extends RecyclerView.Adapter<BollardAdapter.BollardV
         final BollardModel bollardModel = this.bollardCollection.get(position);
         holder.cv_container.setOnClickListener(click -> BollardAdapter.this.onItemClickListener.onBollardItemClicked(bollardModel));
         holder.tv_bollard.setText(bollardModel.getBollardInfo().getTag());
-        DirectionAdapter directionAdapter = new DirectionAdapter(context);
+        DirectionAdapter directionAdapter = new DirectionAdapter(
+                context, () -> BollardAdapter.this.onItemClickListener.onBollardItemClicked(bollardModel));
         directionAdapter.setDirectionCollection(bollardModel.getDirections());
-        holder.rv_directions.setNestedScrollingEnabled(false);
-        holder.rv_directions.setAdapter(directionAdapter);
         holder.rv_directions.setLayoutManager(new CustomLayoutManager(context));
+        holder.rv_directions.setAdapter(directionAdapter);
         directionAdapter.notifyDataSetChanged();
     }
 
@@ -75,7 +75,7 @@ public class BollardAdapter extends RecyclerView.Adapter<BollardAdapter.BollardV
         this.notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener (BollardAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(BollardAdapter.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 

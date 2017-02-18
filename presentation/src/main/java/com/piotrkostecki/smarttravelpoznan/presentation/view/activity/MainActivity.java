@@ -18,8 +18,7 @@ import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.MainFragme
  * Main application screen.
  */
 public class MainActivity extends BaseActivity implements HasComponent<PekaComponent>,
-        MainFragment.DirectionSelectedListener,
-        BollardAdapter.OnItemClickListener {
+        MainFragment.DirectionSelectedListener {
 
     private PekaComponent pekaComponent;
 
@@ -52,10 +51,5 @@ public class MainActivity extends BaseActivity implements HasComponent<PekaCompo
     @Override
     public void navigateToTimetable(String bollardSymbol) {
         navigator.navigateToTimetableActivity(this, bollardSymbol);
-    }
-
-    @Override
-    public void onBollardItemClicked(BollardModel bollardModel) {
-        navigateToTimetable(bollardModel.getBollardInfo().getSymbol());
     }
 }

@@ -31,7 +31,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class MainFragment extends BaseFragment implements MainView {
+public class MainFragment extends BaseFragment implements MainView,
+        DialogBollards.BollardListListener {
 
     public interface DirectionSelectedListener {
         void navigateToTimetable(String bollard);
@@ -146,6 +147,7 @@ public class MainFragment extends BaseFragment implements MainView {
     public void renderBollardList(Collection<BollardModel> bollardCollection) {
         if (bollardCollection != null) {
             DialogBollards dialogBollards = new DialogBollards();
+            dialogBollards.setOnBollardClickListener(this);
             dialogBollards.setBollardCollection(bollardCollection);
             dialogBollards.show(getFragmentManager(), "test");
         }
@@ -189,6 +191,16 @@ public class MainFragment extends BaseFragment implements MainView {
     @Override
     public void showError(String message) {
 
+    }
+
+    @Override
+    public void onBollardClicked(BollardModel bollardModel) {
+        this.mainPresenter.onBollardClicked(bollardModel);
+    }
+
+    @Override
+    public void navigateToTimetable(BollardModel bollardModel) {
+        this.directionSelectedListener.navigateToTimetable(bollardModel.getBollardInfo().getSymbol());
     }
 
     private void setupRecyclerView() {
