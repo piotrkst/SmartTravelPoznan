@@ -1,7 +1,10 @@
 package com.piotrkostecki.smarttravelpoznan.presentation.mapper;
 
+import com.piotrkostecki.smarttravelpoznan.domain.model.Arrival;
 import com.piotrkostecki.smarttravelpoznan.domain.model.Timetable;
+import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.PerActivity;
+import com.piotrkostecki.smarttravelpoznan.presentation.model.ArrivalModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.model.TimetableModel;
 
 import java.util.ArrayList;
@@ -27,29 +30,40 @@ public class TimetableModelDataMapper {
         if (timetable == null) {
             throw new IllegalArgumentException("Cannot transform a null value");
         }
-        TimetableModel timetableModel = new TimetableModel(timetable.getBollardInfo(), timetable.getArrivals());
+        TimetableModel timetableModel = new TimetableModel();
+        timetableModel.setBollardInfo(timetable.getBollardInfo());
+        timetableModel.setArrivals(transform(timetable.getArrivals()));
 
         return timetableModel;
     }
 
-    /**
-     * Transform a Collection of {@link Timetable} into a Collection of {@link TimetableModel}.
-     *
-     * @param timetableCollection Objects to be transformed.
-     * @return List of {@link TimetableModel}.
-     */
-    public Collection<TimetableModel> transform(Collection<Timetable> timetableCollection) {
-        Collection<TimetableModel> timetableModelCollection;
+    public ArrivalModel transform(Arrival arrival) {
+        if (arrival == null) {
+            throw new IllegalArgumentException("Cannot transform a null value");
+        }
+        ArrivalModel arrivalModel = new ArrivalModel();
+        arrivalModel.setDeparture(arrival.getDeparture());
+        arrivalModel.setDirection(arrival.getDirection());
+        arrivalModel.setLine(arrival.getLine());
+        arrivalModel.setMinutes(arrival.getMinutes());
+        arrivalModel.setOnStopPoint(arrival.isOnStopPoint());
+        arrivalModel.setRealTime(arrival.isRealTime());
 
-        if (timetableCollection != null && !timetableCollection.isEmpty()) {
-            timetableModelCollection = new ArrayList<>();
-            for (Timetable timetable : timetableCollection) {
-                timetableModelCollection.add(transform(timetable));
+        return arrivalModel;
+    }
+
+    public Collection<ArrivalModel> transform(Collection<Arrival> arrivalCollection) {
+        Collection<ArrivalModel> arrivalModelCollection;
+
+        if (arrivalCollection != null && !arrivalCollection.isEmpty()) {
+            arrivalModelCollection = new ArrayList<>();
+            for (Arrival arrival : arrivalCollection) {
+                arrivalModelCollection.add(transform(arrival));
             }
         } else {
-            timetableModelCollection = Collections.emptyList();
+            arrivalModelCollection = Collections.emptyList();
         }
 
-        return timetableModelCollection;
+        return arrivalModelCollection;
     }
 }

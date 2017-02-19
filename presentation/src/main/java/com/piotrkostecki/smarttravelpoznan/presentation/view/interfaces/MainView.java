@@ -7,10 +7,6 @@ import java.util.Collection;
 
 public interface MainView extends LoadDataView {
 
-    void showStops();
-
-    void hideStops();
-
     void showStopListLoading();
 
     void hideStopListLoading();

@@ -4,26 +4,24 @@ package com.piotrkostecki.smarttravelpoznan.presentation.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.PekaComponent;
-import com.piotrkostecki.smarttravelpoznan.presentation.model.StopModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.model.TimetableModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.navigation.Constants;
 import com.piotrkostecki.smarttravelpoznan.presentation.presenter.TimetableListPresenter;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.ArrivalAdapter;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.CustomLayoutManager;
-import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.TimetableAdapter;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.interfaces.TimetableListView;
-
-import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -33,11 +31,20 @@ import butterknife.OnClick;
 
 public class TimetableListFragment extends BaseFragment implements TimetableListView {
 
+    public interface BackClickedListener {
+        void navigateBack();
+    }
+
     @Inject TimetableListPresenter timetableListPresenter;
-    @Inject TimetableAdapter timetableAdapter;
+    @Inject ArrivalAdapter arrivalAdapter;
 
     @BindView(R.id.tv_bollard_name) TextView tv_bollard_name;
+    @BindView(R.id.rl_progress) RelativeLayout rl_progress;
     @BindView(R.id.rv_timetable) RecyclerView rv_timetable;
+    @BindView(R.id.fab_back) FloatingActionButton fab_back;
+    @BindView(R.id.fab_refresh) FloatingActionButton fab_refresh;
+
+    private BackClickedListener backClickedListener;
 
     public TimetableListFragment() {
         setRetainInstance(true);
@@ -46,6 +53,9 @@ public class TimetableListFragment extends BaseFragment implements TimetableList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof BackClickedListener) {
+            this.backClickedListener = (BackClickedListener) context;
+        }
     }
 
     @Override
@@ -66,7 +76,6 @@ public class TimetableListFragment extends BaseFragment implements TimetableList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i("test", "onViewCreated: here");
         this.timetableListPresenter.setView(this);
         this.loadTimetableView();
     }
@@ -95,19 +104,36 @@ public class TimetableListFragment extends BaseFragment implements TimetableList
         this.timetableListPresenter.destroy();
     }
 
+    @OnClick(R.id.fab_refresh)
+    public void onRefreshClick() {
+        this.timetableListPresenter.onRefreshButtonClicked();
+    }
+
+    @OnClick(R.id.fab_back)
+    public void onBackClick() {
+        this.timetableListPresenter.onBackButtonClicked();
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
     }
 
     @Override
-    public void showLoading() {
+    public void navigateBack() {
+        this.backClickedListener.navigateBack();
+    }
 
+    @Override
+    public void showLoading() {
+        this.rl_progress.setVisibility(View.VISIBLE);
+        this.getActivity().setProgressBarIndeterminateVisibility(true);
     }
 
     @Override
     public void hideLoading() {
-
+        this.rl_progress.setVisibility(View.GONE);
+        this.getActivity().setProgressBarIndeterminateVisibility(false);
     }
 
     @Override
@@ -124,18 +150,13 @@ public class TimetableListFragment extends BaseFragment implements TimetableList
     public void renderTimetableList(TimetableModel timetables) {
         if (timetables != null) {
             this.tv_bollard_name.setText(timetables.getBollardInfo().getName());
-            this.timetableAdapter.setTimetableCollection(timetables);
+            this.arrivalAdapter.setTimetableCollection(timetables);
         }
     }
 
     @Override
-    public void viewTimetable(TimetableModel timetableModel) {
-
-    }
-
-    @Override
     public void showError(String message) {
-
+        Toast.makeText(context(), getString(R.string.toast_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -150,12 +171,9 @@ public class TimetableListFragment extends BaseFragment implements TimetableList
 
     private void setupRecyclerView() {
         this.rv_timetable.setLayoutManager(new CustomLayoutManager(context()));
-        this.rv_timetable.setAdapter(timetableAdapter);
+        this.rv_timetable.setAdapter(arrivalAdapter);
     }
 
-    /**
-     * Load all timetables.
-     * */
     private void loadTimetableView() {
         this.timetableListPresenter.initialize();
     }

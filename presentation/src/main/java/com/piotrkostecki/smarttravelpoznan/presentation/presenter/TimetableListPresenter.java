@@ -1,32 +1,21 @@
 package com.piotrkostecki.smarttravelpoznan.presentation.presenter;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.piotrkostecki.smarttravelpoznan.domain.exception.DefaultErrorBundle;
 import com.piotrkostecki.smarttravelpoznan.domain.exception.ErrorBundle;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.DefaultSubscriber;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.UseCase;
-import com.piotrkostecki.smarttravelpoznan.domain.model.Stop;
 import com.piotrkostecki.smarttravelpoznan.domain.model.Timetable;
 import com.piotrkostecki.smarttravelpoznan.presentation.exception.ErrorMessageFactory;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.PerActivity;
-import com.piotrkostecki.smarttravelpoznan.presentation.mapper.StopModelDataMapper;
 import com.piotrkostecki.smarttravelpoznan.presentation.mapper.TimetableModelDataMapper;
-import com.piotrkostecki.smarttravelpoznan.presentation.model.StopModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.model.TimetableModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.interfaces.TimetableListView;
-
-import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-/**
- * {@link Presenter} that controls communication between views and models of the presentation
- * layer.
- */
 @PerActivity
 public class TimetableListPresenter implements Presenter {
 
@@ -54,11 +43,15 @@ public class TimetableListPresenter implements Presenter {
         this.viewListView = null;
     }
 
-    /**
-     * Initializes the presenter by start retrieving the user list.
-     */
+    public void onBackButtonClicked() {
+        this.viewListView.navigateBack();
+    }
+
+    public void onRefreshButtonClicked() {
+        this.initialize();
+    }
+
     public void initialize() {
-        Log.i("test", "initialize: " + getBollardSymbol());
         this.loadTimetableList(getBollardSymbol());
     }
 
@@ -66,9 +59,6 @@ public class TimetableListPresenter implements Presenter {
         return this.viewListView.getBollardSymbol();
     }
 
-    /**
-     * Loads all users.
-     */
     private void loadTimetableList(String bollardSymbol) {
         this.hideViewRetry();
         this.showViewLoading();
@@ -92,8 +82,7 @@ public class TimetableListPresenter implements Presenter {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.viewListView.context(),
-                errorBundle.getException());
+        String errorMessage = ErrorMessageFactory.create(this.viewListView.context(), errorBundle.getException());
         this.viewListView.showError(errorMessage);
     }
 
@@ -108,6 +97,8 @@ public class TimetableListPresenter implements Presenter {
     }
 
     private final class TimetableListSubscriber extends DefaultSubscriber<Timetable> {
+
+        @Override public void onCompleted() { TimetableListPresenter.this.hideViewLoading(); }
 
         @Override public void onError(Throwable e) {
             TimetableListPresenter.this.hideViewLoading();

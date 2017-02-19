@@ -6,7 +6,7 @@
     >
 
     <ProgressBar
-        style="@style/Base.Widget.AppCompat.ProgressBar"
+        style="@style/AppTheme.ProgressBar"
         android:layout_centerInParent="true"
         />
 

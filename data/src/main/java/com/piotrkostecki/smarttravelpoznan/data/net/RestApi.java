@@ -14,11 +14,6 @@ import rx.Observable;
 public interface RestApi {
     String API_BASE_URL = "https://www.peka.poznan.pl/vm/method.vm?ts=";
 
-    /** Api url for getting all users */
-    String API_URL_GET_DIRECTION_LIST = API_BASE_URL;
-    /** Api url for getting a user profile: Remember to concatenate id + 'json' */
-    String API_URL_GET_TIMETABLES_DETAILS = API_BASE_URL;
-
     Observable<List<StopEntity>> stopEntityList(String stopName);
 
     Observable<TimetableEntity> timetableEntityList(String bollardSymbol);

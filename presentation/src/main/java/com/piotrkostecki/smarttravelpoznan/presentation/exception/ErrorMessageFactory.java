@@ -3,6 +3,7 @@ package com.piotrkostecki.smarttravelpoznan.presentation.exception;
 import android.content.Context;
 
 import com.piotrkostecki.smarttravelpoznan.data.exception.NetworkConnectionException;
+import com.piotrkostecki.smarttravelpoznan.data.exception.StopNotFoundException;
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 
 /**
@@ -19,6 +20,10 @@ public class ErrorMessageFactory {
 
         if (exception instanceof NetworkConnectionException) {
             message = context.getString(R.string.exception_message_no_connection);
+        }
+
+        if (exception instanceof StopNotFoundException) {
+            message = context.getString(R.string.exception_message_stop_not_found);
         }
 
         return message;

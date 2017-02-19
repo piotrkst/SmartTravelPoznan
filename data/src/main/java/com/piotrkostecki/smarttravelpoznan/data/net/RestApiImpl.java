@@ -11,6 +11,7 @@ import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.mapper.PekaEntityJsonMapper;
 import com.piotrkostecki.smarttravelpoznan.data.exception.NetworkConnectionException;
+import com.piotrkostecki.smarttravelpoznan.data.exception.StopNotFoundException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -55,10 +56,10 @@ public class RestApiImpl implements RestApi {
                         subscriber.onNext(pekaEntityJsonMapper.transformStopEntityCollection(responseStopEntities));
                         subscriber.onCompleted();
                     } else {
-                        subscriber.onError(new NetworkConnectionException());
+                        subscriber.onError(new StopNotFoundException());
                     }
                 } catch (Exception e) {
-                    subscriber.onError(new NetworkConnectionException(e.getCause()));
+                    subscriber.onError(new NetworkConnectionException());
                 }
             } else {
                 subscriber.onError(new NetworkConnectionException());
@@ -78,7 +79,7 @@ public class RestApiImpl implements RestApi {
                         subscriber.onCompleted();
                     }
                 } catch (Exception e) {
-                    subscriber.onError(new NetworkConnectionException(e.getCause()));
+                    subscriber.onError(new StopNotFoundException());
                 }
             } else {
                 subscriber.onError(new NetworkConnectionException());
@@ -109,6 +110,7 @@ public class RestApiImpl implements RestApi {
 
     private String getStopEntitiesFromApi(String stopName) throws MalformedURLException, UnsupportedEncodingException {
         String apiUrl = API_BASE_URL + getTimestamp();
+        Log.i("TEST", "getStopEntitiesFromApi: " + URLEncoder.encode(stopName, "UTF-8"));
         return ApiConnection.createGET(apiUrl).requestSyncCall(METHOD_GET_STOP_POINTS, "{\"pattern\":\"" + stopName + "\"}");
     }
 
@@ -118,7 +120,7 @@ public class RestApiImpl implements RestApi {
     }
 
     private String getTimetableEntitiesFromApi(String bollardSymbol) throws MalformedURLException, UnsupportedEncodingException {
-        return ApiConnection.createGET(API_URL_GET_TIMETABLES_DETAILS).requestSyncCall(METHOD_GET_TIMES, "{\"symbol\":\"" + bollardSymbol + "\"}");
+        return ApiConnection.createGET(API_BASE_URL).requestSyncCall(METHOD_GET_TIMES, "{\"symbol\":\"" + bollardSymbol + "\"}");
     }
 
     private boolean isThereInternetConnection() {
@@ -135,11 +137,5 @@ public class RestApiImpl implements RestApi {
     private String getTimestamp() {
         Long tsLong = System.currentTimeMillis();
         return tsLong.toString();
-    }
-
-    private String decodeContent(String method, String p0) throws UnsupportedEncodingException {
-        String urlParameters = "method=" + URLEncoder.encode(method,"UTF-8") + "&p0=" + URLEncoder.encode(p0, "UTF-8");
-
-        return urlParameters;
     }
 }

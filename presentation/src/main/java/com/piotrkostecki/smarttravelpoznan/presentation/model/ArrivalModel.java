@@ -10,6 +10,9 @@ public class ArrivalModel {
     private String departure;
     private String line;
 
+    public ArrivalModel() {
+    }
+
     public ArrivalModel(boolean realTime, int minutes, String direction, boolean onStopPoint, String departure, String line) {
         this.realTime = realTime;
         this.minutes = minutes;

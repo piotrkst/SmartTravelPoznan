@@ -1,6 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.data.net;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 
 import java.io.IOException;
@@ -12,11 +13,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
 
 /**
  * Api Connection class used to retrieve data from the cloud.
@@ -24,10 +27,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * return a value.
  */
 public class ApiConnection implements Callable<String> {
-
-    private static final String CONTENT_TYPE_LABEL = "Content-Type";
-    private static final String CONTENT_LENGTH_LABEL = "Content-Length";
-    private static final String CONTENT_TYPE_VALUE_JSON = "application/x-www-form-urlencoded; charset=UTF-8";
 
     private URL url;
     private String response;
@@ -62,9 +61,10 @@ public class ApiConnection implements Callable<String> {
                 .add("method", method)
                 .add("p0", content)
                 .build();
+        String postBodyString = bodyToString(formData);
         final Request request = new Request.Builder()
                 .url(this.url)
-                .post(formData)
+                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8"), postBodyString))
                 .build();
 
         try {
@@ -83,6 +83,22 @@ public class ApiConnection implements Callable<String> {
                 .connectTimeout(15000, TimeUnit.MILLISECONDS)
                 .build();
     }
+
+    public static String bodyToString(final RequestBody request){
+        try {
+            final RequestBody copy = request;
+            final Buffer buffer = new Buffer();
+            if(copy != null)
+                copy.writeTo(buffer);
+            else
+                return "";
+            return buffer.readUtf8();
+        }
+        catch (final IOException e) {
+            return "did not work";
+        }
+    }
+
 
     @Override public String call() throws Exception {
         return requestSyncCall(method, content);

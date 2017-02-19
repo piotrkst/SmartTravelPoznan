@@ -1,17 +1,20 @@
 package com.piotrkostecki.smarttravelpoznan.presentation.model;
 
 
-import com.piotrkostecki.smarttravelpoznan.domain.model.Arrival;
 import com.piotrkostecki.smarttravelpoznan.domain.model.BollardInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TimetableModel {
 
     private BollardInfo bollardInfo;
-    private List<Arrival> arrivals;
+    private Collection<ArrivalModel> arrivals;
 
-    public TimetableModel(BollardInfo bollardInfo, List<Arrival> arrivals) {
+    public TimetableModel() {
+    }
+
+    public TimetableModel(BollardInfo bollardInfo, List<ArrivalModel> arrivals) {
         this.bollardInfo = bollardInfo;
         this.arrivals = arrivals;
     }
@@ -24,11 +27,11 @@ public class TimetableModel {
         this.bollardInfo = bollardInfo;
     }
 
-    public List<Arrival> getArrivals() {
+    public Collection<ArrivalModel> getArrivals() {
         return arrivals;
     }
 
-    public void setArrivals(List<Arrival> arrivals) {
+    public void setArrivals(Collection<ArrivalModel> arrivals) {
         this.arrivals = arrivals;
     }
 }

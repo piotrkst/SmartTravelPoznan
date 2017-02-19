@@ -12,19 +12,9 @@ import java.util.Collection;
  */
 public interface TimetableListView extends LoadDataView {
 
-    /**
-     * Render a user list in the UI.
-     *
-     * @param timetables The collection of {@link StopModel} that will be shown.
-     */
-    void renderTimetableList(TimetableModel timetables);
+    void navigateBack();
 
-    /**
-     * View a {@link StopModel} profile/details.
-     *
-     * @param timetableModel The user that will be shown.
-     */
-    void viewTimetable(TimetableModel timetableModel);
+    void renderTimetableList(TimetableModel timetables);
 
     String getBollardSymbol();
 }

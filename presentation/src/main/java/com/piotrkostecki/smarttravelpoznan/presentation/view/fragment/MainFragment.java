@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.PekaComponent;
@@ -126,17 +127,6 @@ public class MainFragment extends BaseFragment implements MainView,
     }
 
     @Override
-    public void showStops() {
-
-    }
-
-    @Override
-    public void hideStops() {
-
-    }
-
-
-    @Override
     public void renderStopList(Collection<StopModel> directionCollection) {
         if (directionCollection != null) {
             this.stopAdapter.setStopCollection(directionCollection);
@@ -190,7 +180,7 @@ public class MainFragment extends BaseFragment implements MainView,
 
     @Override
     public void showError(String message) {
-
+        Toast.makeText(context(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

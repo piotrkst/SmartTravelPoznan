@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">SmartTravel</string>
+    <string name="app_name">Gdzie ta bimba, tej?</string>
+
+    <string name="activity_timetable">Timetable</string>
+    <string name="activity_main">Stop</string>
 
     <string name="btn_get_direction">Search</string>
     <string name="btn_text_retry">Retry</string>
@@ -8,12 +11,23 @@
 
     <string name="tv_prompt_recent_searches">Recent searches</string>
     <string name="tv_prompt_hints">Did you mean&#8230;?</string>
-    <string name="tv_departure_label">Departure:</string>
-    <string name="tv_line_label">Line No:</string>
+
+    // TimetableActivity
+    <string name="tv_stop_label">Stop</string>
+    <string name="tv_departure_label">Departure</string>
+    <string name="tv_direction_label">Direction</string>
+    <string name="tv_line_label">Line</string>
+    <string name="tv_gps">GPS</string>
+    <string name="tv_departure_real_time">in %s min.</string>
+    <string name="tv_departure_real_time_lt">in &lt;1 min.</string>
+    <string name="tv_departure_agenda_time">at %s</string>
 
     <string name="dialog_header">Choose your direction</string>
+
+    <string name="toast_error">Something went wrong, please try again</string>
 
     // Exception messages
     <string name="exception_message_generic">There was an application error</string>
     <string name="exception_message_no_connection">There is no internet connection</string>
+    <string name="exception_message_stop_not_found">Stop not found</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toolbar;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.HasComponent;
@@ -11,10 +12,13 @@ import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.D
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.PekaComponent;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.TimetableListFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Activity for displaying timetables
  * */
-public class TimetableActivity extends BaseActivity implements HasComponent<PekaComponent> {
+public class TimetableActivity extends BaseActivity implements HasComponent<PekaComponent>, TimetableListFragment.BackClickedListener {
 
     String TAG = "test";
     private PekaComponent pekaComponent;
@@ -27,6 +31,8 @@ public class TimetableActivity extends BaseActivity implements HasComponent<Peka
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
+        ButterKnife.bind(this);
+        setupToolbar(getString(R.string.activity_timetable));
 
         this.initializeInjector();
         if (savedInstanceState == null) {
@@ -43,5 +49,10 @@ public class TimetableActivity extends BaseActivity implements HasComponent<Peka
 
     @Override public PekaComponent getComponent() {
         return pekaComponent;
+    }
+
+    @Override
+    public void navigateBack() {
+        finish();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toolbar;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.HasComponent;
@@ -13,6 +14,9 @@ import com.piotrkostecki.smarttravelpoznan.presentation.model.BollardModel;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.adapter.BollardAdapter;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.component.DialogBollards;
 import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.MainFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Main application screen.
@@ -30,6 +34,8 @@ public class MainActivity extends BaseActivity implements HasComponent<PekaCompo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        setupToolbar(getString(R.string.activity_main));
 
         this.initializeInjector();
         if (savedInstanceState == null) {
