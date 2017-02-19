@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Mapper class used to transform PekaEntities (in the data layer) to Peka in the
+ * Mapper class used to transformTimetable PekaEntities (in the data layer) to Peka in the
  * domain layer.
  */
 @Singleton
@@ -24,7 +24,7 @@ public class PekaEntityDataMapper {
     @Inject
     public PekaEntityDataMapper() {}
 
-    public Bollard transform(BollardEntity bollardEntity) {
+    public Bollard transformTimetable(BollardEntity bollardEntity) {
         Bollard bollard = null;
         if (bollardEntity != null) {
             bollard = new Bollard(bollardEntity.getDirections(), bollardEntity.getBollardInfo());
@@ -37,7 +37,7 @@ public class PekaEntityDataMapper {
         List<Bollard> bollardList = new ArrayList<>(10);
         Bollard bollard;
         for (BollardEntity bollardEntity : bollardEntityCollection) {
-            bollard = transform(bollardEntity);
+            bollard = transformTimetable(bollardEntity);
             if (bollard != null) {
                 bollardList.add(bollard);
             }
@@ -46,7 +46,7 @@ public class PekaEntityDataMapper {
         return bollardList;
     }
 
-    public Stop transform(StopEntity stopEntity) {
+    public Stop transformTimetable(StopEntity stopEntity) {
         Stop stop = null;
         if (stopEntity != null) {
             stop = new Stop(stopEntity.getSymbol(), stopEntity.getName());
@@ -59,7 +59,7 @@ public class PekaEntityDataMapper {
         List<Stop> stopList = new ArrayList<>(10);
         Stop stop;
         for (StopEntity stopEntity : stopEntityCollection) {
-            stop = transform(stopEntity);
+            stop = transformTimetable(stopEntity);
             if (stop != null) {
                 stopList.add(stop);
             }
@@ -68,7 +68,7 @@ public class PekaEntityDataMapper {
         return stopList;
     }
 
-    public Timetable transform(TimetableEntity timetableEntity) {
+    public Timetable transformTimetable(TimetableEntity timetableEntity) {
         Timetable timetable = null;
         if (timetableEntity != null) {
             timetable = new Timetable(timetableEntity.getBollardInfo(), timetableEntity.getArrivals());
@@ -81,7 +81,7 @@ public class PekaEntityDataMapper {
         List<Timetable> timetableList = new ArrayList<>(20);
         Timetable timetable;
         for (TimetableEntity timetableEntity : timetableEntityCollection) {
-            timetable = transform(timetableEntity);
+            timetable = transformTimetable(timetableEntity);
             if (timetable != null) {
                 timetableList.add(timetable);
             }
@@ -89,5 +89,4 @@ public class PekaEntityDataMapper {
 
         return timetableList;
     }
-
 }

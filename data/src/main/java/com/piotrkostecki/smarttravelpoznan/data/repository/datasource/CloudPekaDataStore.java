@@ -37,8 +37,8 @@ public class CloudPekaDataStore implements PekaDataStore {
     }
 
     @Override
-    public Observable<TimetableEntity> timetableEntityList(String bollardSymbol) {
-        return this.restApi.timetableEntityList(bollardSymbol);
+    public Observable<TimetableEntity> timetableEntity(String bollardSymbol) {
+        return this.restApi.timetableEntity(bollardSymbol);
     }
 
     @Override

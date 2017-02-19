@@ -11,7 +11,7 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 /**
- * Mapper class used to transform {@link Stop} (in the domain layer) to {@link StopModel} in the
+ * Mapper class used to transformTimetable {@link Stop} (in the domain layer) to {@link StopModel} in the
  * presentation layer.
  */
 @PerActivity
@@ -28,7 +28,7 @@ public class StopModelDataMapper {
      */
     public StopModel transform(Stop stop) {
         if (stop == null) {
-            throw new IllegalArgumentException("Cannot transform a null value");
+            throw new IllegalArgumentException("Cannot transformTimetable a null value");
         }
         StopModel stopModel = new StopModel(stop.getSymbol(), stop.getName());
 

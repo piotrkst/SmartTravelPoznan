@@ -3,7 +3,6 @@ package com.piotrkostecki.smarttravelpoznan.data.net;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
@@ -15,7 +14,6 @@ import com.piotrkostecki.smarttravelpoznan.data.exception.StopNotFoundException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URLEncoder;
 import java.util.List;
 
 import rx.Observable;
@@ -47,7 +45,8 @@ public class RestApiImpl implements RestApi {
     }
 
     @RxLogObservable
-    @Override public Observable<List<StopEntity>> stopEntityList(String stopName) {
+    @Override
+    public Observable<List<StopEntity>> stopEntityList(String stopName) {
         return Observable.create(subscriber -> {
             if (isThereInternetConnection()) {
                 try {
@@ -88,19 +87,18 @@ public class RestApiImpl implements RestApi {
     }
 
     @RxLogObservable
-    @Override public Observable<TimetableEntity> timetableEntityList(String bollardSymbol) {
+    @Override
+    public Observable<TimetableEntity> timetableEntity(String bollardSymbol) {
         return Observable.create(subscriber -> {
             if (isThereInternetConnection()) {
                 try {
-                    String responseTimetableEntities = getTimetableEntitiesFromApi(bollardSymbol);
-                    if (responseTimetableEntities != null) {
-                        subscriber.onNext(pekaEntityJsonMapper.transformTimetableEntityCollection(responseTimetableEntities));
+                    String responseTimetableEntity = getTimetableEntitiesFromApi(bollardSymbol);
+                    if (responseTimetableEntity != null) {
+                        subscriber.onNext(pekaEntityJsonMapper.transformTimetableEntity(responseTimetableEntity));
                         subscriber.onCompleted();
-                    } else {
-                        subscriber.onError(new NetworkConnectionException());
                     }
                 } catch (Exception e) {
-                    subscriber.onError(new NetworkConnectionException(e.getCause()));
+                    subscriber.onError(new NetworkConnectionException());
                 }
             } else {
                 subscriber.onError(new NetworkConnectionException());
@@ -110,7 +108,6 @@ public class RestApiImpl implements RestApi {
 
     private String getStopEntitiesFromApi(String stopName) throws MalformedURLException, UnsupportedEncodingException {
         String apiUrl = API_BASE_URL + getTimestamp();
-        Log.i("TEST", "getStopEntitiesFromApi: " + URLEncoder.encode(stopName, "UTF-8"));
         return ApiConnection.createGET(apiUrl).requestSyncCall(METHOD_GET_STOP_POINTS, "{\"pattern\":\"" + stopName + "\"}");
     }
 
@@ -120,7 +117,8 @@ public class RestApiImpl implements RestApi {
     }
 
     private String getTimetableEntitiesFromApi(String bollardSymbol) throws MalformedURLException, UnsupportedEncodingException {
-        return ApiConnection.createGET(API_BASE_URL).requestSyncCall(METHOD_GET_TIMES, "{\"symbol\":\"" + bollardSymbol + "\"}");
+        String apiUrl = API_BASE_URL + getTimestamp();
+        return ApiConnection.createGET(apiUrl).requestSyncCall(METHOD_GET_TIMES, "{\"symbol\":\"" + bollardSymbol + "\"}");
     }
 
     private boolean isThereInternetConnection() {

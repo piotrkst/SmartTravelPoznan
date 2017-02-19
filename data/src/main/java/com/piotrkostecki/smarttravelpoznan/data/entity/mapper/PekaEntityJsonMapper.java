@@ -1,7 +1,5 @@
 package com.piotrkostecki.smarttravelpoznan.data.entity.mapper;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -18,7 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Class used to transform from Strings representing json to valid objects.
+ * Class used to transformTimetable from Strings representing json to valid objects.
  */
 public class PekaEntityJsonMapper {
 
@@ -63,19 +61,19 @@ public class PekaEntityJsonMapper {
         }
     }
 
-    public TimetableEntity transformTimetableEntityCollection(String timetableListJsonResponse) throws JsonSyntaxException {
+    public TimetableEntity transformTimetableEntity(String timetableJsonResponse) throws JsonSyntaxException {
         JsonParser parser = new JsonParser();
-        TimetableEntity timetableEntityCollection;
-        JsonObject timetableJsonObjectResponse = parser.parse(timetableListJsonResponse)
+        TimetableEntity timetableEntity;
+        JsonObject timetableJsonObjectResponse = parser.parse(timetableJsonResponse)
                 .getAsJsonObject().get("success")
                 .getAsJsonObject();
         try {
-            Log.i("test", "transformTimetableEntityCollection: " + timetableJsonObjectResponse.toString());
-            Type listOfTimetableEntityType = new TypeToken<TimetableEntity>() {}.getType();
-            timetableEntityCollection = this.gson.fromJson(timetableJsonObjectResponse, listOfTimetableEntityType);
+            Type timetableEntityType = new TypeToken<TimetableEntity>() {}.getType();
+            timetableEntity = this.gson.fromJson(timetableJsonObjectResponse, timetableEntityType);
 
-            return timetableEntityCollection;
+            return timetableEntity;
         } catch (JsonSyntaxException jsonException) {
+            jsonException.printStackTrace();
             throw jsonException;
         }
     }

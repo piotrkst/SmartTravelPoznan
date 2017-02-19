@@ -23,7 +23,7 @@ public class BollardModelDataMapper {
      */
     public BollardModel transform(Bollard bollard) {
         if (bollard == null) {
-            throw new IllegalArgumentException("Cannot transform a null value");
+            throw new IllegalArgumentException("Cannot transformTimetable a null value");
         }
         BollardModel bollardModel = new BollardModel(bollard.getDirections(), bollard.getBollardInfo());
 

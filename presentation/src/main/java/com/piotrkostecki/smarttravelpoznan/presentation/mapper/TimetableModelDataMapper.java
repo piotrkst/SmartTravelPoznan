@@ -28,7 +28,7 @@ public class TimetableModelDataMapper {
      */
     public TimetableModel transform(Timetable timetable) {
         if (timetable == null) {
-            throw new IllegalArgumentException("Cannot transform a null value");
+            throw new IllegalArgumentException("Cannot transformTimetable a null value");
         }
         TimetableModel timetableModel = new TimetableModel();
         timetableModel.setBollardInfo(timetable.getBollardInfo());
@@ -39,7 +39,7 @@ public class TimetableModelDataMapper {
 
     public ArrivalModel transform(Arrival arrival) {
         if (arrival == null) {
-            throw new IllegalArgumentException("Cannot transform a null value");
+            throw new IllegalArgumentException("Cannot transformTimetable a null value");
         }
         ArrivalModel arrivalModel = new ArrivalModel();
         arrivalModel.setDeparture(arrival.getDeparture());

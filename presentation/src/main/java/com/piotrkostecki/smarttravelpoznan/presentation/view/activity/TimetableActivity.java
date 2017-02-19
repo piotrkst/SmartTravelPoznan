@@ -3,22 +3,19 @@ package com.piotrkostecki.smarttravelpoznan.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toolbar;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.HasComponent;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.DaggerPekaComponent;
 import com.piotrkostecki.smarttravelpoznan.presentation.internal.di.components.PekaComponent;
-import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.TimetableListFragment;
+import com.piotrkostecki.smarttravelpoznan.presentation.view.fragment.TimetableFragment;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Activity for displaying timetables
  * */
-public class TimetableActivity extends BaseActivity implements HasComponent<PekaComponent>, TimetableListFragment.BackClickedListener {
+public class TimetableActivity extends BaseActivity implements HasComponent<PekaComponent>, TimetableFragment.BackClickedListener {
 
     String TAG = "test";
     private PekaComponent pekaComponent;
@@ -36,7 +33,7 @@ public class TimetableActivity extends BaseActivity implements HasComponent<Peka
 
         this.initializeInjector();
         if (savedInstanceState == null) {
-            addFragment(R.id.fragmentContainer, new TimetableListFragment());
+            addFragment(R.id.fragmentContainer, new TimetableFragment());
         }
     }
 

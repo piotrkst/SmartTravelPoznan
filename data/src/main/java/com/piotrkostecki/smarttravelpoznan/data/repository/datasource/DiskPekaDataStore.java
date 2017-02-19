@@ -26,7 +26,7 @@ public class DiskPekaDataStore implements PekaDataStore {
     }
 
     @Override
-    public Observable<TimetableEntity> timetableEntityList(String bollardSymbol) {
+    public Observable<TimetableEntity> timetableEntity(String bollardSymbol) {
         // TODO: implement simple cache for storing/retrieving collections of timetables.
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

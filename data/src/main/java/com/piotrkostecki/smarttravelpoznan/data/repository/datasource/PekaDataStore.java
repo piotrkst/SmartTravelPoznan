@@ -18,7 +18,7 @@ public interface PekaDataStore {
      */
     Observable<List<StopEntity>> stopEntityList(String stopName);
 
-    Observable<TimetableEntity> timetableEntityList(String bollardSymbol);
+    Observable<TimetableEntity> timetableEntity(String bollardSymbol);
 
     Observable<List<BollardEntity>> bollardEntityList(String stopName);
 }

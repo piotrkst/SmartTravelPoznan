@@ -52,6 +52,6 @@ public class PekaDataRepository implements PekaRepository {
     @Override
     public Observable<Timetable> timetables(String bollardSymbol) {
         final PekaDataStore pekaDataStore = this.pekaDataStoreFactory.createCloudDataStore();
-        return pekaDataStore.timetableEntityList(bollardSymbol).map(this.pekaEntityDataMapper::transform);
+        return pekaDataStore.timetableEntity(bollardSymbol).map(this.pekaEntityDataMapper::transformTimetable);
     }
 }
