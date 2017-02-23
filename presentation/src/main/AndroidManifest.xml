@@ -20,7 +20,9 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".view.activity.MainActivity"/>
+    <activity
+        android:name=".view.activity.MainActivity"
+        android:windowSoftInputMode="adjustResize" />
     <activity android:name=".view.activity.TimetableActivity"/>
     <activity android:name=".view.activity.SplashActivity"/>
 

@@ -1,6 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.data.repository.datasource;
 
 import com.piotrkostecki.smarttravelpoznan.data.cache.StopCache;
+import com.piotrkostecki.smarttravelpoznan.data.database.datasource.SearchesDataSource;
 import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
@@ -9,6 +10,7 @@ import com.piotrkostecki.smarttravelpoznan.data.net.RestApi;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
@@ -18,6 +20,7 @@ public class CloudPekaDataStore implements PekaDataStore {
 
     private final RestApi restApi;
     private final StopCache stopCache;
+    private final SearchesDataSource searchesDataSource;
 
     private final Action1<StopEntity> saveToCacheAction = directionEntity -> {
         if (directionEntity != null) {
@@ -31,9 +34,10 @@ public class CloudPekaDataStore implements PekaDataStore {
      * @param restApi The {@link RestApi} implementation to use.
      * @param stopCache A {@link StopCache} to cache data retrieved from the api.
      */
-    CloudPekaDataStore(RestApi restApi, StopCache stopCache) {
+    CloudPekaDataStore(RestApi restApi, StopCache stopCache, SearchesDataSource searchesDataSource) {
         this.restApi = restApi;
         this.stopCache = stopCache;
+        this.searchesDataSource = searchesDataSource;
     }
 
     @Override
@@ -48,6 +52,9 @@ public class CloudPekaDataStore implements PekaDataStore {
 
     @Override
     public Observable<List<BollardEntity>> bollardEntityList(String stopName) {
-        return this.restApi.bollardEntityList(stopName);
+        this.searchesDataSource.open();
+        Observable<List<BollardEntity>> observable = this.restApi.bollardEntityList(stopName)
+                .doOnNext(entityList -> CloudPekaDataStore.this.searchesDataSource.createSearch(stopName));
+        return observable;
     }
 }

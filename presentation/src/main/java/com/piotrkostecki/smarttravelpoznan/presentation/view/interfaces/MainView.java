@@ -15,11 +15,23 @@ public interface MainView extends LoadDataView {
 
     void renderBollardList(Collection<BollardModel> bollardCollection);
 
-    void fillEditTextWithStopName(String direction);
-
     void changePromptToHints();
 
     void changePromptToRecentSearches();
 
     void navigateToTimetable(BollardModel bollardModel);
+
+    void showEraseButton();
+
+    void fillTextWithStopName(String direction);
+
+    void eraseText();
+
+    void hideEraseButton();
+
+    void handleLayoutChange();
+
+    void scrollLayout();
+
+    void centerLayout();
 }

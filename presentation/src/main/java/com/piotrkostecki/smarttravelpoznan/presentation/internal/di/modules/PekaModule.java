@@ -3,6 +3,7 @@ package com.piotrkostecki.smarttravelpoznan.presentation.internal.di.modules;
 import com.piotrkostecki.smarttravelpoznan.domain.executor.PostExecutionThread;
 import com.piotrkostecki.smarttravelpoznan.domain.executor.ThreadExecutor;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetBollards;
+import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetSearches;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetStops;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.GetTimetable;
 import com.piotrkostecki.smarttravelpoznan.domain.interactor.UseCase;
@@ -21,6 +22,13 @@ import dagger.Provides;
 public class PekaModule {
 
     public PekaModule() {
+    }
+
+    @Provides @PerActivity @Named("searches")
+    UseCase provideGetSearchListUseCase(PekaRepository pekaRepository,
+                                          ThreadExecutor threadExecutor,
+                                          PostExecutionThread postExecutionThread) {
+        return new GetSearches(pekaRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides @PerActivity @Named("stops")

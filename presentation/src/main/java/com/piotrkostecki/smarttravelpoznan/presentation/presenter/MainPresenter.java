@@ -24,7 +24,9 @@ public class MainPresenter implements Presenter {
 
     private MainView viewMainView;
 
+    private List<Stop> recentStops;
     private final UseCase getStopNameListUseCase;
+    private final UseCase getSearchListUseCase;
     private final UseCase getBollardListUseCase;
     private final StopModelDataMapper stopModelDataMapper;
     private final BollardModelDataMapper bollardModelDataMapper;
@@ -32,9 +34,11 @@ public class MainPresenter implements Presenter {
     @Inject
     public MainPresenter(@Named("stops") UseCase getStopNameListUseCase,
                          @Named("bollards") UseCase getBollardListUseCase,
+                         @Named("searches") UseCase getSearchListUseCase,
                          StopModelDataMapper stopModelDataMapper,
                          BollardModelDataMapper bollardModelDataMapper) {
         this.getStopNameListUseCase = getStopNameListUseCase;
+        this.getSearchListUseCase = getSearchListUseCase;
         this.getBollardListUseCase = getBollardListUseCase;
         this.stopModelDataMapper = stopModelDataMapper;
         this.bollardModelDataMapper = bollardModelDataMapper;
@@ -46,7 +50,7 @@ public class MainPresenter implements Presenter {
 
     @Override
     public void resume() {
-
+        this.getSearchListUseCase.execute(new SearchSubscriber());
     }
 
     @Override
@@ -57,7 +61,29 @@ public class MainPresenter implements Presenter {
     @Override
     public void destroy() {
         this.getStopNameListUseCase.unsubscribe();
+        this.getBollardListUseCase.unsubscribe();
+        this.getSearchListUseCase.unsubscribe();
         this.viewMainView = null;
+    }
+
+    public void initialize() {
+        this.getSearchListUseCase.execute(new SearchSubscriber());
+    }
+
+    public void clearText() {
+        this.viewMainView.eraseText();
+    }
+
+    public void scrollLayout() {
+        this.viewMainView.scrollLayout();
+    }
+
+    public void centerLayout() {
+        this.viewMainView.centerLayout();
+    }
+
+    public void layoutChanged() {
+        this.viewMainView.handleLayoutChange();
     }
 
     public void onBollardClicked(BollardModel bollardModel) {
@@ -65,21 +91,27 @@ public class MainPresenter implements Presenter {
     }
 
     public void onSearchClick(final String stopName) {
-        this.showDirectionLoading();
+        this.showViewLoading();
         this.getBollardListUseCase.execute(new BollardSubscriber(), verifyStopName(stopName));
     }
 
     public void onDirectionClick(StopModel stopModel) {
-        this.viewMainView.fillEditTextWithStopName(stopModel.getName());
+        this.viewMainView.fillTextWithStopName(stopModel.getName());
     }
 
     public void onStopNameChanged(final String stopName) {
         /** Classic approach **/
-        if (stopName.length() >= 3) {
-            this.viewMainView.changePromptToHints();
-            this.getStopNameListUseCase.execute(new StopSubscriber(), stopName);
+        if (stopName.length() >= 1) {
+            this.viewMainView.showEraseButton();
+            if (stopName.length() >= 3) {
+                this.viewMainView.changePromptToHints();
+                this.showDirectionLoading();
+                this.getStopNameListUseCase.execute(new StopSubscriber(), stopName);
+            }
         } else {
+            this.viewMainView.hideEraseButton();
             this.viewMainView.changePromptToRecentSearches();
+            this.showStopCollectionInView(recentStops);
         }
 
         /** Java 8 - Lambda Expression Approach, mom pls **/
@@ -119,10 +151,6 @@ public class MainPresenter implements Presenter {
         this.viewMainView.hideLoading();
     }
 
-    private void showViewRetry() {
-        this.viewMainView.showRetry();
-    }
-
     private String verifyStopName(String stopName) {
         for (int i = stopName.length() - 1; i >= 0; --i) {
             if (stopName.charAt(i) == ' ') {
@@ -150,16 +178,32 @@ public class MainPresenter implements Presenter {
         this.viewMainView.renderBollardList(bollardModelCollection);
     }
 
-    private final class StopSubscriber extends rx.Subscriber<List<Stop>> {
+    private final class SearchSubscriber extends rx.Subscriber<List<Stop>> {
 
         @Override public void onCompleted() {
-            MainPresenter.this.hideViewLoading();
+            MainPresenter.this.hideDirectionLoading();
         }
 
         @Override public void onError(Throwable e) {
-            MainPresenter.this.hideViewLoading();
+            MainPresenter.this.hideDirectionLoading();
             MainPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
-            MainPresenter.this.showViewRetry();
+        }
+
+        @Override public void onNext(List<Stop> bollards) {
+            recentStops = bollards;
+            MainPresenter.this.showStopCollectionInView(recentStops);
+        }
+    }
+
+    private final class StopSubscriber extends rx.Subscriber<List<Stop>> {
+
+        @Override public void onCompleted() {
+            MainPresenter.this.hideDirectionLoading();
+        }
+
+        @Override public void onError(Throwable e) {
+            MainPresenter.this.hideDirectionLoading();
+            MainPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
         }
 
         @Override public void onNext(List<Stop> stops) {
@@ -174,7 +218,6 @@ public class MainPresenter implements Presenter {
         @Override public void onError(Throwable e) {
             MainPresenter.this.hideViewLoading();
             MainPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
-            MainPresenter.this.showViewRetry();
         }
 
         @Override public void onNext(List<Bollard> bollards) {

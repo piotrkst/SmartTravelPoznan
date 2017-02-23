@@ -13,6 +13,8 @@ import rx.Observable;
  */
 public interface PekaRepository {
 
+    Observable<List<Stop>> searches();
+
     Observable<List<Stop>> stops(String stopName);
 
     Observable<List<Bollard>> bollards(String stopName);

@@ -58,7 +58,6 @@ public class TimetablePresenter implements Presenter {
     }
 
     private void loadTimetable(String bollardSymbol) {
-        this.hideViewRetry();
         this.showViewLoading();
         this.getTimetable(bollardSymbol);
     }
@@ -69,14 +68,6 @@ public class TimetablePresenter implements Presenter {
 
     private void hideViewLoading() {
         this.viewTimetableView.hideLoading();
-    }
-
-    private void showViewRetry() {
-        this.viewTimetableView.showRetry();
-    }
-
-    private void hideViewRetry() {
-        this.viewTimetableView.hideRetry();
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
@@ -101,7 +92,6 @@ public class TimetablePresenter implements Presenter {
         @Override public void onError(Throwable e) {
             TimetablePresenter.this.hideViewLoading();
             TimetablePresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
-            TimetablePresenter.this.showViewRetry();
         }
 
         @Override public void onNext(Timetable bollards) {

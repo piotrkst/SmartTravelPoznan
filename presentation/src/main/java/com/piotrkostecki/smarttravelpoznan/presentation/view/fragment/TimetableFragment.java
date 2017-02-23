@@ -137,16 +137,6 @@ public class TimetableFragment extends BaseFragment implements TimetableView {
     }
 
     @Override
-    public void showRetry() {
-
-    }
-
-    @Override
-    public void hideRetry() {
-
-    }
-
-    @Override
     public void renderTimetableList(TimetableModel timetables) {
         if (timetables != null) {
             this.tv_bollard_name.setText(timetables.getBollardInfo().getName());

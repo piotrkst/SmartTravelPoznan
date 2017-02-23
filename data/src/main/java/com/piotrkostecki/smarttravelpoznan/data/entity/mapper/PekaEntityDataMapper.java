@@ -1,6 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.data.entity.mapper;
 
 import com.piotrkostecki.smarttravelpoznan.data.entity.BollardEntity;
+import com.piotrkostecki.smarttravelpoznan.data.entity.SearchEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.StopEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.TimetableEntity;
 import com.piotrkostecki.smarttravelpoznan.domain.model.Bollard;
@@ -23,6 +24,28 @@ public class PekaEntityDataMapper {
 
     @Inject
     public PekaEntityDataMapper() {}
+
+    public Stop transformSearch(SearchEntity searchEntity) {
+        Stop stop = null;
+        if (searchEntity != null) {
+            stop = new Stop(searchEntity.getName());
+        }
+
+        return stop;
+    }
+
+    public List<Stop> transformSearch(Collection<SearchEntity> searchEntityCollection) {
+        List<Stop> stopList = new ArrayList<>();
+        Stop stop;
+        for (SearchEntity searchEntity : searchEntityCollection) {
+            stop = transformSearch(searchEntity);
+            if (stop != null) {
+                stopList.add(stop);
+            }
+        }
+
+        return stopList;
+    }
 
     public Bollard transformTimetable(BollardEntity bollardEntity) {
         Bollard bollard = null;

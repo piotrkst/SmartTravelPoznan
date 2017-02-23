@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.piotrkostecki.smarttravelpoznan.data.cache.StopCache;
+import com.piotrkostecki.smarttravelpoznan.data.database.datasource.SearchesDataSource;
 import com.piotrkostecki.smarttravelpoznan.data.entity.mapper.PekaEntityJsonMapper;
 import com.piotrkostecki.smarttravelpoznan.data.net.RestApi;
 import com.piotrkostecki.smarttravelpoznan.data.net.RestApiImpl;
@@ -19,11 +20,13 @@ public class PekaDataStoreFactory {
 
     private final Context context;
     private final StopCache stopCache;
+    private final SearchesDataSource searchesDataSource;
 
     @Inject
-    public PekaDataStoreFactory(@NonNull Context context, @NonNull StopCache stopCache) {
+    public PekaDataStoreFactory(@NonNull Context context, @NonNull StopCache stopCache, @NonNull SearchesDataSource searchesDataSource) {
         this.context = context.getApplicationContext();
         this.stopCache = stopCache;
+        this.searchesDataSource = searchesDataSource;
     }
 
     /**
@@ -48,6 +51,6 @@ public class PekaDataStoreFactory {
         PekaEntityJsonMapper pekaEntityJsonMapper = new PekaEntityJsonMapper();
         RestApi restApi = new RestApiImpl(this.context, pekaEntityJsonMapper);
 
-        return new CloudPekaDataStore(restApi, this.stopCache);
+        return new CloudPekaDataStore(restApi, this.stopCache, this.searchesDataSource);
     }
 }

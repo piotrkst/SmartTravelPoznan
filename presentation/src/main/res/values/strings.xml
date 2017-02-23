@@ -22,7 +22,7 @@
     <string name="tv_departure_real_time_lt">in &lt;1 min.</string>
     <string name="tv_departure_agenda_time">at %s</string>
 
-    <string name="dialog_header">Choose your direction</string>
+    <string name="dialog_header">Choose your stop</string>
 
     <string name="toast_error">Something went wrong, please try again</string>
 

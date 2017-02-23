@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toolbar;
 
 import com.piotrkostecki.smarttravelpoznan.presentation.R;
@@ -30,12 +31,13 @@ public class MainActivity extends BaseActivity implements HasComponent<PekaCompo
         return new Intent(context, MainActivity.class);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setupToolbar(getString(R.string.activity_main));
+        setupToolbar(getString(R.string.app_name));
 
         this.initializeInjector();
         if (savedInstanceState == null) {

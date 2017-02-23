@@ -1,5 +1,7 @@
 package com.piotrkostecki.smarttravelpoznan.data.repository;
 
+import com.piotrkostecki.smarttravelpoznan.data.database.datasource.SearchesDataSource;
+import com.piotrkostecki.smarttravelpoznan.data.entity.SearchEntity;
 import com.piotrkostecki.smarttravelpoznan.data.entity.mapper.PekaEntityDataMapper;
 import com.piotrkostecki.smarttravelpoznan.data.repository.datasource.PekaDataStore;
 import com.piotrkostecki.smarttravelpoznan.data.repository.datasource.PekaDataStoreFactory;
@@ -15,26 +17,27 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 
-/**
- * {@link PekaRepository} for retrieving user data.
- */
 @Singleton
 public class PekaDataRepository implements PekaRepository {
 
+    private final SearchesDataSource searchesDataSource;
     private final PekaDataStoreFactory pekaDataStoreFactory;
     private final PekaEntityDataMapper pekaEntityDataMapper;
 
-    /**
-            * Constructs a {@link PekaRepository}.
-            *
-            * @param dataStoreFactory A factory to construct different data source implementations.
-    * @param pekaEntityDataMapper {@link PekaEntityDataMapper}.
-            */
     @Inject
-    public PekaDataRepository(PekaDataStoreFactory dataStoreFactory,
+    public PekaDataRepository(SearchesDataSource searchesDataSource,
+                              PekaDataStoreFactory dataStoreFactory,
                               PekaEntityDataMapper pekaEntityDataMapper) {
+        this.searchesDataSource = searchesDataSource;
         this.pekaDataStoreFactory = dataStoreFactory;
         this.pekaEntityDataMapper = pekaEntityDataMapper;
+    }
+
+    @Override
+    public Observable<List<Stop>> searches() {
+        searchesDataSource.open();
+        Observable<List<Stop>> observable = searchesDataSource.getSearches().map(this.pekaEntityDataMapper::transformSearch);
+        return observable;
     }
 
     @Override
